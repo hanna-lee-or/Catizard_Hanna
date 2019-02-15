@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class N_CardSystem : MonoBehaviour
 {
 
-    public bool isGame = true, isCurse = false, isSOS = false;
+    public bool isGame = true, isCurse = false, isSOS = false, isCatnip = false, isCatnipOn = false;
     public int GameMinute = 5, HeroSpeed = 1, cat_wait = 4;
     public Slider HeroSlider;
     public Animator HeroAnimator;
@@ -17,9 +17,13 @@ public class N_CardSystem : MonoBehaviour
     public GridView gridView;
     public Slider SP_Slider;
     public GameObject[] Cat_graphic;
-   
+    public GameObject CardCover;
+    public GameObject[] UIArray_N, UIArray_E;
+    public Image[] UIImage_N, UIImage_E;
+    public GameObject[] catnip;
+    public Transform[] catnipXY;
 
-    private int SOS_repeat = 0;
+    private int catnipIndex = 0, maxCatnip, SOS_repeat = 0;
     private float blockSize, blockBuffer;
 
     // Start is called before the first frame update
@@ -28,10 +32,16 @@ public class N_CardSystem : MonoBehaviour
         blockSize = gridView.blockSize;
         blockBuffer = gridView.blockBuffer;
         HeroSlider.maxValue = GameMinute * 120;
+        maxCatnip = catnip.Length;
         StartCoroutine("HeroTimer");
         StartCoroutine("CatMove");
         Cat_graphic[1].SetActive(false);
         Cat_graphic[0].SetActive(true);
+        CardCover.SetActive(false);
+        for(int i = 0; i < maxCatnip; i++)
+        {
+            catnip[i].SetActive(false);
+        }
     }
 
     private void Update()
@@ -71,6 +81,9 @@ public class N_CardSystem : MonoBehaviour
     {
         switch (num)
         {
+            case 6:
+                On_Catnip();
+                break;
             case 7:
                 On_SOS();
                 break;
@@ -117,7 +130,14 @@ public class N_CardSystem : MonoBehaviour
 
         while (isGame)
         {
-            
+            // 캣잎에 닿았다면
+            if (isCatnipOn)
+            {
+                isCatnipOn = false;
+                int stopTime = Random.Range(3, 6);
+                print("캣잎 : + " + stopTime + "초 추가 정지");
+                yield return new WaitForSecondsRealtime(stopTime);
+            }
             // 다음 순서의 길이 있다면 다음 노드로 이동
             if (gridView.minIndex>=0&&gridView.isPath && gridView.CatIndex < gridView.CatPath[gridView.minIndex].Count)
             {
@@ -149,7 +169,7 @@ public class N_CardSystem : MonoBehaviour
                 gridView.temp_x = next.column;
                 gridView.temp_y = next.row;
 
-                Cat.position = new Vector3(xSize-7.4f, ySize+2.3f); // 수동으로 변경할 부분 좌표계
+                Cat.position = new Vector3(xSize-7.4f, ySize+2.3f, 5); // 수동으로 변경할 부분 좌표계
             }
 
             for (int i = 0; i < cat_wait; i++)
@@ -215,9 +235,78 @@ public class N_CardSystem : MonoBehaviour
         Hero.localScale = new Vector3(1, 1, 1);
     }
 
-    
+    // UI관련 함수
+    IEnumerator On_UI(int num)
+    {
+        float valueA = 1;
+        // num에 해당하는 UI를 킨다.
+        for (int i = 0; i < UIArray_E.Length; i++)
+        {
+            UIArray_E[i].SetActive(false);
+        }
+        UIArray_E[num].SetActive(true);
+        yield return new WaitForSecondsRealtime(0.1f);
+        // 그 UI 이미지가 점점 투명해지다가 꺼지게 한다.
+        for (int i = 1; i <= 10; i++)
+        {
+            yield return new WaitForSecondsRealtime(0.1f);
+            valueA -= 0.1f;
+            UIImage_E[num].color = new Color(1, 1, 1, valueA);
+        }
+        UIArray_E[num].SetActive(false);
+    }
 
+    // 에러UI 띄우기
+    public void On_ErrorUI()
+    {
+        StopCoroutine("On_UI");
+        StartCoroutine("On_UI", 0);
+    }
 
+    // 뇌물 카드 함수
+    public void On_Catnip()
+    {
+        isCatnip = true;
+        CardCover.SetActive(true);
+        UIArray_N[0].SetActive(true);
+    }
 
+    public void CreateCatnip(int column, int row)
+    {
+        isCatnip = false;
+        UIArray_N[0].SetActive(false);
+        bool isColumn = column % 2 == 1 ? true : false;
+        bool isRow = row % 2 == 1 ? true : false;
+        float xSize = 0, ySize = 0;
+
+        // 위치 지정
+        if (isColumn)
+        {
+            xSize = (column + 1) * 0.5f * (blockSize * 7f + blockBuffer) - blockSize * 3f;
+        }
+        else
+        {
+            xSize = column * 0.5f * (blockSize * 7f + blockBuffer) + blockSize;
+        }
+        if (isRow)
+        {
+            ySize = (row + 1) * 0.5f * -(blockSize * 7f + blockBuffer) + blockSize * 3f;
+        }
+        else
+        {
+            ySize = row * 0.5f * -(blockSize * 7f + blockBuffer) - blockSize;
+        }
+        catnip[catnipIndex].SetActive(true);
+        catnipXY[catnipIndex].position = new Vector3(xSize-7.3f, ySize+2.3f, 5f);
+        CardCover.SetActive(false);
+        StartCoroutine("Off_Catnip", catnipIndex);
+        catnipIndex = (catnipIndex + 1) % maxCatnip;
+    }
+
+    IEnumerator Off_Catnip(int index)
+    {
+        yield return new WaitForSecondsRealtime(15f);
+        catnip[index].SetActive(false);
+    }
     
 }

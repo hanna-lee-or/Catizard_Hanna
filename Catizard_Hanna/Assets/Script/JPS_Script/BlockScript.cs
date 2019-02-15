@@ -36,6 +36,7 @@ public class BlockScript : MonoBehaviour
 	public GridView gridView;
     public int BlockType;
     public dotActive d;
+    public N_CardSystem NCS;
 
 	public bool isPathEndPoint = false;
 
@@ -231,12 +232,26 @@ public class BlockScript : MonoBehaviour
 
 	void OnMouseDown()
 	{
-		if ( nodeReference == null ) return;                                // If a Node Reference wasn't given, then don't do anything
+		if (nodeReference == null ) return;                                // If a Node Reference wasn't given, then don't do anything
 
-        nodeReference.isObstacle = !nodeReference.isObstacle;    // flip obstacles
-        setupDisplay();
-        gridView.Reset();
-        gridView.JPS();
+        if (BlockType == 1 || BlockType == 2)
+        {
+            nodeReference.isObstacle = !nodeReference.isObstacle;    // flip obstacles
+            setupDisplay();
+            gridView.Reset();
+            gridView.JPS();
+        }
+        else if (BlockType == 3 && NCS.isCatnip)
+        {
+            if (nodeReference.isObstacle)
+            {
+                NCS.On_ErrorUI();
+            }
+            else
+            {
+                NCS.CreateCatnip(nodeReference.pos.column, nodeReference.pos.row);
+            }
+        }
 
     }
 

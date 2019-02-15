@@ -80,7 +80,12 @@ public class N_CardDeckSys : MonoBehaviour
         while (true)
         {
             TimeToSleep = SuffleTime - BlinkTime - (DrawTime * 5) - 1;
-            // 카드를 버린다.
+            // 카드를 버린다. 카드 함수 진행 상황을 중단한다.
+            if (CS.isCatnip)
+            {
+                CS.isCatnip = false;
+                CS.UIArray_N[0].SetActive(false);
+            }
             RemoveInfo();
             N_CardEvent.isPress = false;
             total = 0;
