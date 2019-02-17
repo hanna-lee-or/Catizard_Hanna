@@ -82,6 +82,9 @@ public class N_CardSystem : MonoBehaviour
     {
         switch (num)
         {
+            case 3:
+                wild();
+                break;
             case 4:
                 provoke();
                 break;
@@ -123,6 +126,11 @@ public class N_CardSystem : MonoBehaviour
         HeroAnimator.SetBool("run", false);
         HeroSpeed = 1;
         HeroSOS.SetActive(false);
+    }
+
+    public void wild() {
+        isWild = true;
+        print("wild 실행중, true");
     }
 
     // 도발 카드 (시간 누적O)
