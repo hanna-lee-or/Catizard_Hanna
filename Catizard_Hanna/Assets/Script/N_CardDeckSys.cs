@@ -87,6 +87,11 @@ public class N_CardDeckSys : MonoBehaviour
                 CS.UIArray_N[0].SetActive(false);
                 CS.CardCover.SetActive(false);
             }
+            if (CS.isWild)
+            {
+                CS.isWild = false;
+            }
+
             RemoveInfo();
             N_CardEvent.isPress = false;
             total = 0;
@@ -234,75 +239,85 @@ public class N_CardDeckSys : MonoBehaviour
     public void ClickLeftCard(int number)
     {
         int CardType = HandOrder[number];
+        int TempType = CardType;
         print(CardType + "번 카드 사용");
+        
+        print(CS.isWild);
+
+        if (!CS.isWild)
+        {
+            
+            if (number < 2)
+                left++;
+            else if (number > 2)
+                right++;
+
+            // 사용된 카드는 버려짐
+            Removed_Card[total].SetActive(true);
+            Removed_Image[total].sprite = CardSprite[CardType];
+            Removed_Animator[total].SetTrigger("remove");
+            total++;
+            StartCoroutine(RemoveCard(number, false));
+
+            // 카드 가운데로 모으기
+            if (number == 1 && HandOrder[0] != -1)
+            {
+                CardType = HandOrder[0];
+                StartCoroutine(RemoveCard(0, false));
+                HandOrder[1] = CardType;
+                CardObject[1].SetActive(true);
+                CardImage[1].sprite = CardSprite[CardType];
+                SetMark(1);
+            }
+            else if (number == 3 && HandOrder[4] != -1)
+            {
+                CardType = HandOrder[4];
+                StartCoroutine(RemoveCard(4, false));
+                HandOrder[3] = CardType;
+                CardObject[3].SetActive(true);
+                CardImage[3].sprite = CardSprite[CardType];
+                SetMark(3);
+            }
+            else if (number == 2 && left * right < 4)
+            {
+                if (left > right)
+                {
+                    for (int i = 3; i <= 4; i++)
+                    {
+                        CardType = HandOrder[i];
+                        StartCoroutine(RemoveCard(i, false));
+                        HandOrder[i - 1] = CardType;
+                        CardObject[i - 1].SetActive(true);
+                        CardImage[i - 1].sprite = CardSprite[CardType];
+                        if (right == 1)
+                            break;
+                    }
+                    right++;
+                }
+                else
+                {
+                    for (int i = 1; i >= 0; i--)
+                    {
+                        CardType = HandOrder[i];
+                        StartCoroutine(RemoveCard(i, false));
+                        HandOrder[i + 1] = CardType;
+                        CardObject[i + 1].SetActive(true);
+                        CardImage[i + 1].sprite = CardSprite[CardType];
+                        if (left == 1)
+                            break;
+                    }
+                    left++;
+                }
+                SetMark(2);
+            }
+        }
+        else
+        {
+            CS.isWild = false;
+        }
 
         // + HandOrder[number]에 해당하는 카드 함수 실행
-        CS.CardFunction(CardType);
-
-        if (number < 2)
-            left++;
-        else if (number > 2)
-            right++;
-
-        // 사용된 카드는 버려짐
-        Removed_Card[total].SetActive(true);
-        Removed_Image[total].sprite = CardSprite[CardType];
-        Removed_Animator[total].SetTrigger("remove");
-        total++;
-        StartCoroutine(RemoveCard(number, false));
-
-        // 카드 가운데로 모으기
-        if (number == 1 && HandOrder[0] != -1)
-        {
-            CardType = HandOrder[0];
-            StartCoroutine(RemoveCard(0, false));
-            HandOrder[1] = CardType;
-            CardObject[1].SetActive(true);
-            CardImage[1].sprite = CardSprite[CardType];
-            SetMark(1);
-        }
-        else if (number == 3 && HandOrder[4] != -1)
-        {
-            CardType = HandOrder[4];
-            StartCoroutine(RemoveCard(4, false));
-            HandOrder[3] = CardType;
-            CardObject[3].SetActive(true);
-            CardImage[3].sprite = CardSprite[CardType];
-            SetMark(3);
-        }
-        else if (number == 2 && left * right < 4)
-        {
-            if (left > right)
-            {
-                for (int i = 3; i <= 4; i++)
-                {
-                    CardType = HandOrder[i];
-                    StartCoroutine(RemoveCard(i, false));
-                    HandOrder[i - 1] = CardType;
-                    CardObject[i - 1].SetActive(true);
-                    CardImage[i - 1].sprite = CardSprite[CardType];
-                    if (right == 1)
-                        break;
-                }
-                right++;
-            }
-            else
-            {
-                for (int i = 1; i >= 0; i--)
-                {
-                    CardType = HandOrder[i];
-                    StartCoroutine(RemoveCard(i, false));
-                    HandOrder[i + 1] = CardType;
-                    CardObject[i + 1].SetActive(true);
-                    CardImage[i + 1].sprite = CardSprite[CardType];
-                    if (left == 1)
-                        break;
-                }
-                left++;
-            }
-            SetMark(2);
-        }
-
+        CS.CardFunction(TempType);
     }
 
     // 마우스 오른쪽 누르면
