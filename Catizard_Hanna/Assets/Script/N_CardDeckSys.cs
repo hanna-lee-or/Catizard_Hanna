@@ -29,6 +29,7 @@ public class N_CardDeckSys : MonoBehaviour
     public GameObject[] DeckObject;
 
     private int left, right, total;
+    private bool isCardFuc = true;
 
     // Start is called before the first frame update
     void Start()
@@ -91,7 +92,6 @@ public class N_CardDeckSys : MonoBehaviour
             {
                 CS.isWild = false;
             }
-
             RemoveInfo();
             N_CardEvent.isPress = false;
             total = 0;
@@ -235,18 +235,38 @@ public class N_CardDeckSys : MonoBehaviour
         return true;
     }
 
+    // 공격 스킬
+    public void CardAttack()
+    {
+        // 수중에 카드가 없으면 실행X
+        int left = 5 - total;
+        if (left == 0)
+            return;
+
+        int number = 0, rnd = Random.Range(1, left + 1);
+        for (int i = 0; i < 5; i++)
+        {
+            if (HandOrder[i] >= 0)
+                number++;
+            if (number == rnd)
+            {
+                number = i;
+                break;
+            }
+        }
+        isCardFuc = false;
+        ClickLeftCard(number);
+    }
+
     // 마우스 왼쪽으로 카드를 클릭햇을 때
     public void ClickLeftCard(int number)
     {
         int CardType = HandOrder[number];
         int TempType = CardType;
-        print(CardType + "번 카드 사용");
-        
-        print(CS.isWild);
+        print(CardType + "번 카드 사용 (isCardFuc : " + isCardFuc + " )");
 
         if (!CS.isWild)
         {
-            
             if (number < 2)
                 left++;
             else if (number > 2)
@@ -311,13 +331,15 @@ public class N_CardDeckSys : MonoBehaviour
                 SetMark(2);
             }
         }
-        else
-        {
-            CS.isWild = false;
-        }
 
         // + HandOrder[number]에 해당하는 카드 함수 실행
-        CS.CardFunction(TempType);
+        if (isCardFuc)
+        {
+            CS.CardFunction(TempType);
+        }
+        else
+            isCardFuc = true;
+
     }
 
     // 마우스 오른쪽 누르면

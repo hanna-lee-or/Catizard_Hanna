@@ -8,7 +8,8 @@ public class N_CardSystem : MonoBehaviour
 
     public bool isGame = true, isCurse = false, isProvoke = false;
     public bool isSOS = false, isWild = false, isCatnip = false, isCatnipOn = false;
-    public int GameMinute = 5, HeroSpeed = 1, cat_wait = 4, Cat_num_prev = 0, Cat_num_curr = 0, provoke_time = 18, total_gold = 300, bonus_gold = 0, remain_time = 0;
+    public int GameMinute = 5, HeroSpeed = 1, cat_wait = 4, Cat_num_prev = 0, Cat_num_curr = 0, provoke_time = 18;
+    public int total_gold = 300, bonus_gold = 0, remain_time = 0;
     public Slider HeroSlider;
     public Animator HeroAnimator;
     public GameObject HeroSOS, HeroCurse, HeroDual;
@@ -21,9 +22,12 @@ public class N_CardSystem : MonoBehaviour
     public GameObject CardCover;
     public GameObject[] UIArray_N, UIArray_E;
     public Image[] UIImage_N, UIImage_E;
+    public GameObject RedObj, ClawObj;
+    public Image Claw;
     public GameObject[] catnip;
     public Transform[] catnipXY;
-    public Text gold, time;
+    public N_CardDeckSys CDS;
+    public Text goldText, timeText;
 
     private int catnipIndex = 0, maxCatnip, SOS_repeat = 0, Provoke_repeat = 0;
     private float blockSize, blockBuffer;
@@ -39,8 +43,9 @@ public class N_CardSystem : MonoBehaviour
         StartCoroutine("HeroTimer");
         StartCoroutine("CatMove");
         graphic_change(0);
+        RedObj.SetActive(false);
+        ClawObj.SetActive(false);
         CardCover.SetActive(false);
-        
         for(int i = 0; i < maxCatnip; i++)
         {
             catnip[i].SetActive(false);
@@ -130,7 +135,9 @@ public class N_CardSystem : MonoBehaviour
         HeroSOS.SetActive(false);
     }
 
-    public void wild() {
+    // 와일드 카드
+    public void wild()
+    {
         isWild = true;
         print("wild 실행중, true");
     }
@@ -177,9 +184,11 @@ public class N_CardSystem : MonoBehaviour
             if (isCatnipOn)
             {
                 isCatnipOn = false;
+                graphic_change(4);
                 int stopTime = Random.Range(4, 7);
                 print("캣잎 : 4 + " + stopTime + "초 추가 정지");
                 yield return new WaitForSecondsRealtime(4 + stopTime);
+                graphic_change(0);
             }
             else
             {
@@ -294,6 +303,43 @@ public class N_CardSystem : MonoBehaviour
         graphic_change(0);
     }
 
+    // 공격 스킬
+    public void Cat_attack()
+    {
+        if (SP_Slider.value < 30)
+            return;
+
+        graphic_change(1);
+        SP_Slider.value -= 30;
+        StartCoroutine("Attack");
+    }
+
+    IEnumerator Attack()
+    {
+        ClawObj.SetActive(true);
+        CardCover.SetActive(true);
+        Claw.fillOrigin = 1;
+        for(int i = 0; i <= 10; i++)
+        {
+            Claw.fillAmount = i * 0.1f;
+            yield return new WaitForSecondsRealtime(0.002f);
+            if (i == 3)
+                RedObj.SetActive(true);
+        }
+        CDS.CardAttack();
+        CardCover.SetActive(false);
+        Claw.fillOrigin = 0;
+        for (int i = 15; i >= 0; i--)
+        {
+            Claw.fillAmount = i * 0.066f;
+            yield return new WaitForSecondsRealtime(0.002f);
+            if (i == 6)
+                RedObj.SetActive(false);
+        }
+        ClawObj.SetActive(false);
+        graphic_change(0);
+    }
+
     // UI관련 함수
     IEnumerator On_UI(int num)
     {
@@ -389,29 +435,31 @@ public class N_CardSystem : MonoBehaviour
         }
     }
 
+    // 플레이어가 이겼을 때
     public void Win()
     {
-        bonus_gold = (gridView.CatPath[gridView.minIndex].Count-gridView.CatIndex-1) * 40;
+        bonus_gold = (gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex - 1) * 40;
         StartCoroutine("Clear");
     }
 
     IEnumerator Clear()
     {
-//        Clear_window.SetActive(true);
-        for (int i = 0; i< bonus_gold; i++)
+        //Clear_window.SetActive(true);
+        for (int i = 0; i < bonus_gold; i++)
         {
             total_gold++;
-            gold.text = "" + total_gold;
+            goldText.text = "" + total_gold;
             yield return new WaitForSecondsRealtime(0.01f);
         }
 
     }
 
+    // 플레이어가 졌을 때
     public void Lose()
     {
         //fail_window.SetActive(true);
-        remain_time= (int)HeroSlider.value / 2;
-        time.text = "" + remain_time;
+        remain_time = (int)HeroSlider.value / 2;
+        timeText.text = "" + remain_time;
     }
-    
+
 }
