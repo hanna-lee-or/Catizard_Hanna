@@ -6,8 +6,9 @@ using UnityEngine.UI;
 public class N_CardSystem : MonoBehaviour
 {
 
-    public bool isGame = true, isCurse = false, isSOS = false, isCatnip = false, isCatnipOn = false;
-    public int GameMinute = 5, HeroSpeed = 1, cat_wait = 4;
+    public bool isGame = true, isCurse = false, isProvoke = false;
+    public bool isSOS = false, isWild = false, isCatnip = false, isCatnipOn = false;
+    public int GameMinute = 5, HeroSpeed = 1, cat_wait = 4, Cat_num_prev = 0, Cat_num_curr = 0, provoke_time = 18;
     public Slider HeroSlider;
     public Animator HeroAnimator;
     public GameObject HeroSOS, HeroCurse, HeroDual;
@@ -23,7 +24,7 @@ public class N_CardSystem : MonoBehaviour
     public GameObject[] catnip;
     public Transform[] catnipXY;
 
-    private int catnipIndex = 0, maxCatnip, SOS_repeat = 0;
+    private int catnipIndex = 0, maxCatnip, SOS_repeat = 0, Provoke_repeat = 0;
     private float blockSize, blockBuffer;
     private Point next = new Point(6, 0);
 
@@ -36,8 +37,7 @@ public class N_CardSystem : MonoBehaviour
         maxCatnip = catnip.Length;
         StartCoroutine("HeroTimer");
         StartCoroutine("CatMove");
-        Cat_graphic[1].SetActive(false);
-        Cat_graphic[0].SetActive(true);
+        graphic_change(0);
         CardCover.SetActive(false);
         for(int i = 0; i < maxCatnip; i++)
         {
@@ -82,6 +82,9 @@ public class N_CardSystem : MonoBehaviour
     {
         switch (num)
         {
+            case 4:
+                provoke();
+                break;
             case 6:
                 On_Catnip();
                 break;
@@ -122,6 +125,34 @@ public class N_CardSystem : MonoBehaviour
         HeroSOS.SetActive(false);
     }
 
+    // 도발 카드 (시간 누적O)
+    public void provoke()
+    {
+        isProvoke = true;
+        Provoke_repeat++;
+        if (Provoke_repeat == 1)
+        {
+            cat_wait = cat_wait / 2;
+            graphic_change(2);
+            SP_Slider.value = 0;
+            StartCoroutine("After_provoke");
+        }
+
+    }
+
+    IEnumerator After_provoke()
+    {
+        while (Provoke_repeat > 0)
+        {
+            yield return new WaitForSecondsRealtime(18f);
+            Provoke_repeat--;
+        }
+        cat_wait = cat_wait * 2;
+        SP_Slider.value = 0;
+        graphic_change(0);
+        isProvoke = false;
+    }
+
     // JPS
     IEnumerator CatMove()
     {
@@ -145,7 +176,7 @@ public class N_CardSystem : MonoBehaviour
                 // 마법사가 움직이는 타이밍 조절
                 for (int i = 0; i < cat_wait; i++)
                 {
-                    if (SP_Slider.value < 100)
+                    if (SP_Slider.value < 100 && !isProvoke)
                     {
                         SP_Slider.value++;
                     }
@@ -191,11 +222,20 @@ public class N_CardSystem : MonoBehaviour
         }
     }
 
+    // 마법사 sprite 변경
+    void graphic_change(int curr)
+    {
+        for (int i = 0; i < Cat_graphic.Length; i++)
+        {
+            Cat_graphic[i].SetActive(false);
+        }
+        Cat_graphic[curr].SetActive(true);
+    }
+
     // 휴식 스킬
     public void Cat_rest()
     {
-        Cat_graphic[0].SetActive(false);
-        Cat_graphic[1].SetActive(true);
+        graphic_change(1);
         cat_wait = 12;
         Invoke("Cat_SPplus", 12f);
     }
@@ -210,8 +250,7 @@ public class N_CardSystem : MonoBehaviour
         else
             SP_Slider.value = 100;
         cat_wait = 4;
-        Cat_graphic[0].SetActive(true);
-        Cat_graphic[1].SetActive(false);
+        graphic_change(0);
     }
 
     // 저주 스킬
@@ -220,6 +259,7 @@ public class N_CardSystem : MonoBehaviour
         if (SP_Slider.value < 30)
             return;
 
+        graphic_change(1);
         isCurse = true;
         Hero.localScale = new Vector3(-1, 1, 1);
         HeroCurse.SetActive(true);
@@ -241,6 +281,7 @@ public class N_CardSystem : MonoBehaviour
         if (isSOS)
             HeroSOS.SetActive(true);
         Hero.localScale = new Vector3(1, 1, 1);
+        graphic_change(0);
     }
 
     // UI관련 함수
