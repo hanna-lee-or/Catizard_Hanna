@@ -8376,6 +8376,8 @@ MonoBehaviour:
   Cat_num_prev: 0
   Cat_num_curr: 0
   provoke_time: 18
+  total_gold: 300
+  bonus_gold: 0
   HeroSlider: {fileID: 1611517644}
   HeroAnimator: {fileID: 1959973289}
   HeroSOS: {fileID: 2023715341}
@@ -8437,6 +8439,7 @@ MonoBehaviour:
   - {fileID: 38860371}
   - {fileID: 215374654}
   - {fileID: 1402242758}
+  gold: {fileID: 0}
 --- !u!4 &1896276966
 Transform:
   m_ObjectHideFlags: 0
