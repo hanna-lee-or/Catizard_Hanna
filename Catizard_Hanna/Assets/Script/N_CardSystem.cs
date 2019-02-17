@@ -8,7 +8,7 @@ public class N_CardSystem : MonoBehaviour
 
     public bool isGame = true, isCurse = false, isProvoke = false;
     public bool isSOS = false, isWild = false, isCatnip = false, isCatnipOn = false;
-    public int GameMinute = 5, HeroSpeed = 1, cat_wait = 4, Cat_num_prev = 0, Cat_num_curr = 0, provoke_time = 18;
+    public int GameMinute = 5, HeroSpeed = 1, cat_wait = 4, Cat_num_prev = 0, Cat_num_curr = 0, provoke_time = 18, total_gold = 300, bonus_gold = 0, remain_time = 0;
     public Slider HeroSlider;
     public Animator HeroAnimator;
     public GameObject HeroSOS, HeroCurse, HeroDual;
@@ -23,6 +23,7 @@ public class N_CardSystem : MonoBehaviour
     public Image[] UIImage_N, UIImage_E;
     public GameObject[] catnip;
     public Transform[] catnipXY;
+    public Text gold, time;
 
     private int catnipIndex = 0, maxCatnip, SOS_repeat = 0, Provoke_repeat = 0;
     private float blockSize, blockBuffer;
@@ -39,6 +40,7 @@ public class N_CardSystem : MonoBehaviour
         StartCoroutine("CatMove");
         graphic_change(0);
         CardCover.SetActive(false);
+        
         for(int i = 0; i < maxCatnip; i++)
         {
             catnip[i].SetActive(false);
@@ -385,6 +387,31 @@ public class N_CardSystem : MonoBehaviour
             catnip[index].SetActive(false);
             On_ErrorUI();
         }
+    }
+
+    public void Win()
+    {
+        bonus_gold = (gridView.CatPath[gridView.minIndex].Count-gridView.CatIndex-1) * 40;
+        StartCoroutine("Clear");
+    }
+
+    IEnumerator Clear()
+    {
+//        Clear_window.SetActive(true);
+        for (int i = 0; i< bonus_gold; i++)
+        {
+            total_gold++;
+            gold.text = "" + total_gold;
+            yield return new WaitForSecondsRealtime(0.01f);
+        }
+
+    }
+
+    public void Lose()
+    {
+        //fail_window.SetActive(true);
+        remain_time= (int)HeroSlider.value / 2;
+        time.text = "" + remain_time;
     }
     
 }
