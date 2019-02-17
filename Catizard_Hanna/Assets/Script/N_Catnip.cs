@@ -11,8 +11,13 @@ public class N_Catnip : MonoBehaviour
     {
         if (coll.gameObject.CompareTag("cat"))
         {
-            gameObject.SetActive(false);
             NCS.isCatnipOn = true;
+            gameObject.SetActive(false);
+        }
+
+        if (coll.gameObject.CompareTag("catnip"))
+        {
+            NCS.isCatnip = true;
         }
     }
 

@@ -85,6 +85,7 @@ public class N_CardDeckSys : MonoBehaviour
             {
                 CS.isCatnip = false;
                 CS.UIArray_N[0].SetActive(false);
+                CS.CardCover.SetActive(false);
             }
             RemoveInfo();
             N_CardEvent.isPress = false;

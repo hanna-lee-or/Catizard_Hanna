@@ -25,6 +25,7 @@ public class N_CardSystem : MonoBehaviour
 
     private int catnipIndex = 0, maxCatnip, SOS_repeat = 0;
     private float blockSize, blockBuffer;
+    private Point next = new Point(6, 0);
 
     // Start is called before the first frame update
     void Awake()
@@ -130,19 +131,33 @@ public class N_CardSystem : MonoBehaviour
 
         while (isGame)
         {
+
             // 캣잎에 닿았다면
             if (isCatnipOn)
             {
                 isCatnipOn = false;
-                int stopTime = Random.Range(3, 6);
-                print("캣잎 : + " + stopTime + "초 추가 정지");
-                yield return new WaitForSecondsRealtime(stopTime);
+                int stopTime = Random.Range(4, 7);
+                print("캣잎 : 4 + " + stopTime + "초 추가 정지");
+                yield return new WaitForSecondsRealtime(4 + stopTime);
             }
+            else
+            {
+                // 마법사가 움직이는 타이밍 조절
+                for (int i = 0; i < cat_wait; i++)
+                {
+                    if (SP_Slider.value < 100)
+                    {
+                        SP_Slider.value++;
+                    }
+                    yield return new WaitForSecondsRealtime(1f);
+                }
+            }
+
             // 다음 순서의 길이 있다면 다음 노드로 이동
             if (gridView.minIndex>=0&&gridView.isPath && gridView.CatIndex < gridView.CatPath[gridView.minIndex].Count)
             {
                 gridView.CatIndex++;
-                Point next = gridView.CatPath[gridView.minIndex][gridView.CatIndex];
+                next = gridView.CatPath[gridView.minIndex][gridView.CatIndex];
                 bool isColumn = next.column % 2 == 1 ? true : false;
                 bool isRow = next.row % 2 == 1 ? true : false;
                 float xSize = 0, ySize = 0;
@@ -170,29 +185,21 @@ public class N_CardSystem : MonoBehaviour
                 gridView.temp_y = next.row;
 
                 Cat.position = new Vector3(xSize-7.4f, ySize+2.3f, 5); // 수동으로 변경할 부분 좌표계
+                yield return new WaitForSeconds(0.000000001f);
             }
 
-            for (int i = 0; i < cat_wait; i++)
-            {
-                if (SP_Slider.value < 100)
-                {
-                    SP_Slider.value++;
-                }
-            yield return new WaitForSecondsRealtime(1f);
-
-            }
         }
     }
 
+    // 휴식 스킬
     public void Cat_rest()
     {
         Cat_graphic[0].SetActive(false);
         Cat_graphic[1].SetActive(true);
         cat_wait = 12;
         Invoke("Cat_SPplus", 12f);
-
     }
-
+    
     void Cat_SPplus()
     {
         if (SP_Slider.value <= 70)
@@ -207,6 +214,7 @@ public class N_CardSystem : MonoBehaviour
         Cat_graphic[1].SetActive(false);
     }
 
+    // 저주 스킬
     public void Cat_curse()
     {
         if (SP_Slider.value < 30)
@@ -273,8 +281,14 @@ public class N_CardSystem : MonoBehaviour
 
     public void CreateCatnip(int column, int row)
     {
+        // 고양이 주변에는 캣닢 설치 불가
+        if (next.column - 2 <= column && column <= next.column + 2 && next.row - 2 <= row && row <= next.row + 2)
+        {
+            On_ErrorUI();
+            return;
+        }
+
         isCatnip = false;
-        UIArray_N[0].SetActive(false);
         bool isColumn = column % 2 == 1 ? true : false;
         bool isRow = row % 2 == 1 ? true : false;
         float xSize = 0, ySize = 0;
@@ -298,15 +312,30 @@ public class N_CardSystem : MonoBehaviour
         }
         catnip[catnipIndex].SetActive(true);
         catnipXY[catnipIndex].position = new Vector3(xSize-7.3f, ySize+2.3f, 5f);
-        CardCover.SetActive(false);
-        StartCoroutine("Off_Catnip", catnipIndex);
-        catnipIndex = (catnipIndex + 1) % maxCatnip;
+
+        StartCoroutine("Check_Catnip", catnipIndex);
+
     }
 
-    IEnumerator Off_Catnip(int index)
+    IEnumerator Check_Catnip(int index)
     {
-        yield return new WaitForSecondsRealtime(15f);
-        catnip[index].SetActive(false);
+        yield return new WaitForSeconds(0.0000000001f);
+        print("Check_Catnip : " + isCatnip);
+        // 캣닢이 설치된 곳에 캣닢 또는 허수아비가 있지 않다면 정상작동
+        if (!isCatnip)
+        {
+            UIArray_N[0].SetActive(false);
+            CardCover.SetActive(false);
+            catnipIndex = (catnipIndex + 1) % maxCatnip;
+            yield return new WaitForSecondsRealtime(15f);
+            catnip[index].SetActive(false);
+        }
+        // 아니라면 캣닢설치 취소 및 에러창 생성
+        else
+        {
+            catnip[index].SetActive(false);
+            On_ErrorUI();
+        }
     }
     
 }

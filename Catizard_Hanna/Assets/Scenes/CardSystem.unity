@@ -8989,8 +8989,8 @@ MonoBehaviour:
   BlinkTime: 5
   DrawTime: 0.2
   MaxEnergy: 100
-  TotalCard: 11
-  CardOrder: 0000000001000000020000000300000004000000050000000600000006000000070000000700000008000000
+  TotalCard: 15
+  CardOrder: 000000000100000002000000030000000400000005000000060000000600000006000000060000000600000007000000070000000800000008000000
   CS: {fileID: 1896276965}
   CardNText: {fileID: 1121443436}
   EnergyText: {fileID: 593247145}
@@ -9451,7 +9451,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2131911015}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.054513, y: 0.35746202, z: -72.49829}
+  m_LocalPosition: {x: -12.01, y: 8.23, z: -72.49829}
   m_LocalScale: {x: 0.44682756, y: 0.6881144, z: 0.8936551}
   m_Children: []
   m_Father: {fileID: 419489840}
