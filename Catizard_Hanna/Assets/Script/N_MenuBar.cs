@@ -44,7 +44,7 @@ public class N_MenuBar : MonoBehaviour
 
     public void GotoDeck()
     {
-        // 덱 화면으로 이동
+        SceneManager.LoadScene("DeckScene");
     }
 
     public void GotoStoryBook()

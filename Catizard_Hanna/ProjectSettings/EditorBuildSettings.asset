@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Store_3.unity
     guid: c3bef8c10e09d5745b24ccc911310112
   - enabled: 1
+    path: Assets/Scenes/DeckScene.unity
+    guid: 629185fc08a0ed047ab4260e8627e47b
+  - enabled: 1
     path: Assets/Scenes/HelpScene.unity
     guid: 85ffdf978e7ab7c409596d27f21265c6
   - enabled: 1
