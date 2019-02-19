@@ -223,7 +223,6 @@ public class N_CardSystem : MonoBehaviour
 
         while (isGame)
         {
-
             // 캣잎에 닿았다면
             if (isCatnipOn)
             {
@@ -232,7 +231,11 @@ public class N_CardSystem : MonoBehaviour
                 int stopTime = Random.Range(4, 7);
                 print("캣잎 : 4 + " + stopTime + "초 추가 정지");
                 yield return new WaitForSeconds(4 + stopTime);
-                graphic_change(0);
+                // 도발상태였다면 도발 이미지로 변경
+                if (isProvoke)
+                    graphic_change(2);
+                else
+                    graphic_change(0);
             }
             else
             {
@@ -458,7 +461,6 @@ public class N_CardSystem : MonoBehaviour
     IEnumerator Check_Catnip(int index)
     {
         yield return new WaitForSeconds(0.0000000001f);
-        print("Check_Catnip : " + isCatnip);
         // 캣닢이 설치된 곳에 캣닢 또는 허수아비가 있지 않다면 정상작동
         if (!isCatnip)
         {
