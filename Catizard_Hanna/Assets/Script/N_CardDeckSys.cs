@@ -75,7 +75,7 @@ public class N_CardDeckSys : MonoBehaviour
         float TimeToSleep = SuffleTime - BlinkTime - (DrawTime * 5) - 1;
         int index = 0;
 
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSeconds(1);
 
         // 카드덱 시스템
         while (true)
@@ -91,6 +91,8 @@ public class N_CardDeckSys : MonoBehaviour
             if (CS.isWild)
             {
                 CS.isWild = false;
+                CS.UIArray_N[4].SetActive(false);
+                CS.WhiteColorChange(1);
             }
             RemoveInfo();
             N_CardEvent.isPress = false;
@@ -100,14 +102,14 @@ public class N_CardDeckSys : MonoBehaviour
                 Removed_Animator[i].SetTrigger("end");
                 StartCoroutine(RemoveCard(i, true));
             }
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSeconds(0.5f);
             for (int i = 0; i < 5; i++)
             {
                 Removed_Card[i].SetActive(false);
             }
-            yield return new WaitForSecondsRealtime(0.25f);
+            yield return new WaitForSeconds(0.25f);
             EnergyAnimator.SetTrigger("Blink");
-            yield return new WaitForSecondsRealtime(0.25f);
+            yield return new WaitForSeconds(0.25f);
 
             // 에너지 회복
             Energy = MaxEnergy;
@@ -132,14 +134,14 @@ public class N_CardDeckSys : MonoBehaviour
                         DeckObject[1].SetActive(false);
                     else if (CardN == 0)
                         DeckObject[0].SetActive(false);
-                    yield return new WaitForSecondsRealtime(DrawTime);
+                    yield return new WaitForSeconds(DrawTime);
                 }
                 // 뽑을 카드가 없으면 덱을 루프시킨다.
                 else
                 {
                     CardShuffle();
                     // + 카드 루프 애니메이션
-                    yield return new WaitForSecondsRealtime(0.3f);
+                    yield return new WaitForSeconds(0.3f);
                     for (int k = 0; k < TotalCard; k++)
                     {
                         if (k < 3)
@@ -150,17 +152,17 @@ public class N_CardDeckSys : MonoBehaviour
                         CardNText.text = "" + CardN;
                         CardIndex = 0;
                         if (k < 3)
-                            yield return new WaitForSecondsRealtime(0.1f);
+                            yield return new WaitForSeconds(0.1f);
                         else
-                            yield return new WaitForSecondsRealtime(0.01f);
+                            yield return new WaitForSeconds(0.01f);
                     }
-                    yield return new WaitForSecondsRealtime(0.3f);
+                    yield return new WaitForSeconds(0.3f);
                     i--;
                     TimeToSleep -= 0.6f + 0.01f * (TotalCard - 3);
                 }
             }
 
-            yield return new WaitForSecondsRealtime(TimeToSleep);
+            yield return new WaitForSeconds(TimeToSleep);
 
             // BlinkTime만큼 깜박인다.
             for (int i = 1; i <= BlinkTime; i++)
@@ -169,12 +171,12 @@ public class N_CardDeckSys : MonoBehaviour
                 {
                     CardImage[m].color = new Color(0.5f, 0.5f, 0.5f, 1);
                 }
-                yield return new WaitForSecondsRealtime(0.5f);
+                yield return new WaitForSeconds(0.5f);
                 for (int n = 0; n < 5; n++)
                 {
                     CardImage[n].color = new Color(1, 1, 1, 1);
                 }
-                yield return new WaitForSecondsRealtime(0.5f);
+                yield return new WaitForSeconds(0.5f);
             }
         }
     }
@@ -200,7 +202,7 @@ public class N_CardDeckSys : MonoBehaviour
         if (isAni)
         {
             CardAnimator[index].SetTrigger("Remove");
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSeconds(0.5f);
         }
         CardObject[index].SetActive(false);
     }
@@ -287,7 +289,8 @@ public class N_CardDeckSys : MonoBehaviour
                 HandOrder[1] = CardType;
                 CardObject[1].SetActive(true);
                 CardImage[1].sprite = CardSprite[CardType];
-                SetMark(1);
+                if (isCardFuc)
+                    SetMark(1);
             }
             else if (number == 3 && HandOrder[4] != -1)
             {
@@ -296,7 +299,8 @@ public class N_CardDeckSys : MonoBehaviour
                 HandOrder[3] = CardType;
                 CardObject[3].SetActive(true);
                 CardImage[3].sprite = CardSprite[CardType];
-                SetMark(3);
+                if (isCardFuc)
+                    SetMark(3);
             }
             else if (number == 2 && left * right < 4)
             {
@@ -328,8 +332,15 @@ public class N_CardDeckSys : MonoBehaviour
                     }
                     left++;
                 }
-                SetMark(2);
+                if (isCardFuc)
+                    SetMark(2);
             }
+        }
+        else
+        {
+            CS.isWild = false;
+            CS.UIArray_N[4].SetActive(false);
+            CS.WhiteColorChange(1);
         }
 
         // + HandOrder[number]에 해당하는 카드 함수 실행

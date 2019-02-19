@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class N_CardSystem : MonoBehaviour
 {
 
-    public bool isGame = true, isCurse = false, isProvoke = false;
+    public bool isGame = true, isPause = false, isCurse = false, isProvoke = false;
     public bool isSOS = false, isWild = false, isCatnip = false, isCatnipOn = false;
     public int GameMinute = 5, HeroSpeed = 1, cat_wait = 4, Cat_num_prev = 0, Cat_num_curr = 0, provoke_time = 18;
     public int total_gold = 300, bonus_gold = 0, remain_time = 0;
@@ -20,9 +21,11 @@ public class N_CardSystem : MonoBehaviour
     public Slider SP_Slider;
     public GameObject[] Cat_graphic;
     public GameObject CardCover;
-    public GameObject[] UIArray_N, UIArray_E;
-    public Image[] UIImage_N, UIImage_E;
-    public GameObject RedObj, ClawObj;
+    public Image[] White_Card;
+    public GameObject[] UIArray_N;
+    public GameObject UIArray_E;
+    public Image UIImage_E;
+    public GameObject OptionScreen, FakeBoard, RedObj, ClawObj;
     public Image Claw;
     public GameObject[] catnip;
     public Transform[] catnipXY;
@@ -80,8 +83,40 @@ public class N_CardSystem : MonoBehaviour
                 HeroABC[i].anchorMin = new Vector2(Hero.anchorMin.x, 0);
                 HeroABC[i].anchorMax = new Vector2(Hero.anchorMax.x, 0);
             }
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSeconds(0.5f);
         }
+    }
+
+    // 옵션 버튼 기능
+    public void OptionOn()
+    {
+        if (!isPause)
+        {
+            isPause = true;
+            SP_bar.localScale = new Vector3(1, 0, 1);
+            OptionScreen.SetActive(true);
+            FakeBoard.SetActive(true);
+            Time.timeScale = 0;     // 일시정지
+            print("일시정지");
+        }
+    }
+
+    public void OptionOff()
+    {
+        if (isPause)
+        {
+            isPause = false;
+            Time.timeScale = 1;     // 일시정지 해제
+            SP_bar.localScale = new Vector3(1, 1, 1);
+            OptionScreen.SetActive(false);
+            FakeBoard.SetActive(false);
+        }
+    }
+
+    // 메인 화면으로 이동
+    public void GotoMain()
+    {
+        SceneManager.LoadScene("MenuScene");
     }
 
     // 카드 기능 함수
@@ -125,7 +160,7 @@ public class N_CardSystem : MonoBehaviour
 
         while (SOS_repeat > 0)
         {
-            yield return new WaitForSecondsRealtime(10f);
+            yield return new WaitForSeconds(10f);
             SOS_repeat--;
         }
         isSOS = false;
@@ -139,7 +174,16 @@ public class N_CardSystem : MonoBehaviour
     public void wild()
     {
         isWild = true;
-        print("wild 실행중, true");
+        UIArray_N[4].SetActive(true);
+        WhiteColorChange(0.4f);
+    }
+
+    public void WhiteColorChange(float b)
+    {
+        for (int i = 0; i < White_Card.Length; i++)
+        {
+            White_Card[i].color = new Color(1, 1, b, 1);
+        }
     }
 
     // 도발 카드 (시간 누적O)
@@ -161,7 +205,7 @@ public class N_CardSystem : MonoBehaviour
     {
         while (Provoke_repeat > 0)
         {
-            yield return new WaitForSecondsRealtime(18f);
+            yield return new WaitForSeconds(18f);
             Provoke_repeat--;
         }
         cat_wait = cat_wait * 2;
@@ -175,7 +219,7 @@ public class N_CardSystem : MonoBehaviour
     {
         // 게임 시작 후 잠시동안은 움직이지 않음
         Cat.position = new Vector3(blockSize - 7.4f, 6 * 0.5f * -(blockSize * 7f + blockBuffer) - blockSize + 2.3f);
-        yield return new WaitForSecondsRealtime(4f);
+        yield return new WaitForSeconds(4f);
 
         while (isGame)
         {
@@ -187,7 +231,7 @@ public class N_CardSystem : MonoBehaviour
                 graphic_change(4);
                 int stopTime = Random.Range(4, 7);
                 print("캣잎 : 4 + " + stopTime + "초 추가 정지");
-                yield return new WaitForSecondsRealtime(4 + stopTime);
+                yield return new WaitForSeconds(4 + stopTime);
                 graphic_change(0);
             }
             else
@@ -199,7 +243,7 @@ public class N_CardSystem : MonoBehaviour
                     {
                         SP_Slider.value++;
                     }
-                    yield return new WaitForSecondsRealtime(1f);
+                    yield return new WaitForSeconds(1f);
                 }
             }
 
@@ -322,18 +366,20 @@ public class N_CardSystem : MonoBehaviour
         for(int i = 0; i <= 10; i++)
         {
             Claw.fillAmount = i * 0.1f;
-            yield return new WaitForSecondsRealtime(0.002f);
-            if (i == 3)
+            yield return new WaitForSeconds(0.002f);
+            if (i == 4)
+            {
                 RedObj.SetActive(true);
+                CDS.CardAttack();
+            }
         }
-        CDS.CardAttack();
         CardCover.SetActive(false);
         Claw.fillOrigin = 0;
         for (int i = 15; i >= 0; i--)
         {
             Claw.fillAmount = i * 0.066f;
-            yield return new WaitForSecondsRealtime(0.002f);
-            if (i == 6)
+            yield return new WaitForSeconds(0.002f);
+            if (i == 5)
                 RedObj.SetActive(false);
         }
         ClawObj.SetActive(false);
@@ -344,21 +390,16 @@ public class N_CardSystem : MonoBehaviour
     IEnumerator On_UI(int num)
     {
         float valueA = 1;
-        // num에 해당하는 UI를 킨다.
-        for (int i = 0; i < UIArray_E.Length; i++)
-        {
-            UIArray_E[i].SetActive(false);
-        }
-        UIArray_E[num].SetActive(true);
-        yield return new WaitForSecondsRealtime(0.1f);
+        UIArray_E.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
         // 그 UI 이미지가 점점 투명해지다가 꺼지게 한다.
         for (int i = 1; i <= 10; i++)
         {
-            yield return new WaitForSecondsRealtime(0.1f);
+            yield return new WaitForSeconds(0.1f);
             valueA -= 0.1f;
-            UIImage_E[num].color = new Color(1, 1, 1, valueA);
+            UIImage_E.color = new Color(1, 1, 1, valueA);
         }
-        UIArray_E[num].SetActive(false);
+        UIArray_E.SetActive(false);
     }
 
     // 에러UI 띄우기
@@ -424,7 +465,7 @@ public class N_CardSystem : MonoBehaviour
             UIArray_N[0].SetActive(false);
             CardCover.SetActive(false);
             catnipIndex = (catnipIndex + 1) % maxCatnip;
-            yield return new WaitForSecondsRealtime(15f);
+            yield return new WaitForSeconds(15f);
             catnip[index].SetActive(false);
         }
         // 아니라면 캣닢설치 취소 및 에러창 생성
@@ -449,7 +490,7 @@ public class N_CardSystem : MonoBehaviour
         {
             total_gold++;
             goldText.text = "" + total_gold;
-            yield return new WaitForSecondsRealtime(0.01f);
+            yield return new WaitForSeconds(0.01f);
         }
 
     }
