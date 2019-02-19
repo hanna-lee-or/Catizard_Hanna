@@ -8,6 +8,7 @@ public class N_MenuBar : MonoBehaviour
 {
 
     public Text CardSum, GoldAmount;
+    public GameObject ExitUI;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +24,22 @@ public class N_MenuBar : MonoBehaviour
 
     public void GotoStore()
     {
-        // 상점 화면으로 이동
+        SceneManager.LoadScene("StoreScene");
+    }
+
+    public void GotoStore_Remove()
+    {
+        SceneManager.LoadScene("Store_1");
+    }
+
+    public void GotoStore_Purchase()
+    {
+        SceneManager.LoadScene("Store_2");
+    }
+
+    public void GotoStore_Strengthen()
+    {
+        SceneManager.LoadScene("Store_3");
     }
 
     public void GotoDeck()
@@ -39,6 +55,16 @@ public class N_MenuBar : MonoBehaviour
     public void GotoHelp()
     {
         SceneManager.LoadScene("HelpScene");
+    }
+
+    public void ExitUI_On()
+    {
+        ExitUI.SetActive(true);
+    }
+
+    public void ExitUI_Off()
+    {
+        ExitUI.SetActive(false);
     }
 
     public void Quit()

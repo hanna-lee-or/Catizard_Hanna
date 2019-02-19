@@ -28,11 +28,11 @@ public class N_StartStory : MonoBehaviour, IPointerDownHandler
     public void CardSetting()
     {
         N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.block1] = 8;
-        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.block2] = 0;
-        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.block3] = 0;
-        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.wild] = 0;
-        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.provoke] = 0;
-        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.scarecrow] = 0;
+        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.block2] = 1;
+        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.block3] = 1;
+        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.wild] = 1;
+        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.provoke] = 1;
+        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.scarecrow] = 1;
         N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.catnip] = 4;
         N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.SOS] = 2;
         N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.removeBlock] = 6;
@@ -55,7 +55,12 @@ public class N_StartStory : MonoBehaviour, IPointerDownHandler
         else if (index == 3)
             QuitStory();
         else
-            SceneManager.LoadScene("MenuScene");
+            GotoMenu();
+    }
+
+    public void GotoMenu()
+    {
+        SceneManager.LoadScene("MenuScene");
     }
 
     // 스토리 끝냄
