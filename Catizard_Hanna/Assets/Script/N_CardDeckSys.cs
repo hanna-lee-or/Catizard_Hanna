@@ -78,10 +78,11 @@ public class N_CardDeckSys : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         // 카드덱 시스템
-        while (true)
+        while (CS.isGame)
         {
             TimeToSleep = SuffleTime - BlinkTime - (DrawTime * 5) - 1;
             // 카드를 버린다. 카드 함수 진행 상황을 중단한다.
+          
             if (CS.isCatnip)
             {
                 CS.isCatnip = false;
@@ -114,6 +115,12 @@ public class N_CardDeckSys : MonoBehaviour
             // 에너지 회복
             Energy = MaxEnergy;
             EnergyText.text = "" + Energy;
+
+
+            //마법사 스킬 타이밍 판단
+
+            CS.CatSkill();
+            print("스킬사용판단중");
 
             // 카드를 뽑는다.
             left = right = 0;

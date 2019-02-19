@@ -10,7 +10,7 @@ public class N_CardSystem : MonoBehaviour
     public bool isGame = true, isPause = false, isCurse = false, isProvoke = false;
     public bool isSOS = false, isWild = false, isCatnip = false, isCatnipOn = false;
     public int GameMinute = 5, HeroSpeed = 1, cat_wait = 4, Cat_num_prev = 0, Cat_num_curr = 0, provoke_time = 18;
-    public int total_gold = 300, bonus_gold = 0, remain_time = 0;
+    public int total_gold = 300, bonus_gold = 0, remain_time = 0, RemainPath = 0, skill_hard = 5, skill_normal = 10;
     public Slider HeroSlider;
     public Animator HeroAnimator;
     public GameObject HeroSOS, HeroCurse, HeroDual;
@@ -31,6 +31,7 @@ public class N_CardSystem : MonoBehaviour
     public Transform[] catnipXY;
     public N_CardDeckSys CDS;
     public Text goldText, timeText;
+    public GameObject Game_clear, Game_Over;
 
     private int catnipIndex = 0, maxCatnip, SOS_repeat = 0, Provoke_repeat = 0;
     private float blockSize, blockBuffer;
@@ -284,8 +285,13 @@ public class N_CardSystem : MonoBehaviour
                 Cat.position = new Vector3(xSize-7.4f, ySize+2.3f, 5); // 수동으로 변경할 부분 좌표계
                 yield return new WaitForSeconds(0.000000001f);
             }
-
+            if (next.column == 36)
+            {
+                isGame = false;
+                Lose();
+            }
         }
+
     }
 
     // 마법사 sprite 변경
@@ -481,6 +487,7 @@ public class N_CardSystem : MonoBehaviour
     // 플레이어가 이겼을 때
     public void Win()
     {
+        Game_clear.SetActive(true);
         bonus_gold = (gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex - 1) * 40;
         StartCoroutine("Clear");
     }
@@ -494,15 +501,41 @@ public class N_CardSystem : MonoBehaviour
             goldText.text = "" + total_gold;
             yield return new WaitForSeconds(0.01f);
         }
-
+        N_PlayerInfo.Gold += total_gold;
     }
 
     // 플레이어가 졌을 때
     public void Lose()
     {
-        //fail_window.SetActive(true);
+        print("lose 함수임");
+        Game_Over.SetActive(true);
         remain_time = (int)HeroSlider.value / 2;
         timeText.text = "" + remain_time;
+    }
+
+    //스킬 사용 타이밍 판단 함수
+    public void CatSkill()
+    {
+        RemainPath = gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex;
+        if(skill_hard <= RemainPath)
+        {
+            //폭발 스킬 쓰기
+            print("폭발스킬 써야함");
+        }
+        if ((skill_normal < RemainPath) && (RemainPath < skill_hard) )
+        {
+            print("둘 중 아무거나 써야함");
+            if (Random.Range(0, 1) == 0)
+            {
+                Cat_attack();
+            }
+            else
+            {
+                Cat_curse();
+            }
+        }
+
+
     }
 
 }
