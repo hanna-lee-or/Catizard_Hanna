@@ -51,6 +51,7 @@ public class putWall : MonoBehaviour
                 || gridview.grid.gridNodes[2 * gridview.rand_y[k] * 37 + 2 * gridview.rand_x[k]] == gridview.grid.gridNodes[bIndex - 36] 
                 || gridview.grid.gridNodes[2 * gridview.rand_y[k] * 37 + 2 * gridview.rand_x[k]] == gridview.grid.gridNodes[bIndex - 38])
             {
+                card.On_ErrorUI(0);
                 able = false;
                 return;
             }
@@ -62,6 +63,7 @@ public class putWall : MonoBehaviour
 
     public void checkPosition(int column, int row)
     {
+        // 벽이 겹치면 안됨
         if(cardType == 0)
         {
             if (n.shape == 0 || n.shape == 2) //  l 모양
@@ -75,8 +77,7 @@ public class putWall : MonoBehaviour
                     checkPos = true;
             }
         }
-
-       else if(cardType == 1)
+        else if(cardType == 1)
         {
             switch (n.shape)
             {
@@ -98,7 +99,6 @@ public class putWall : MonoBehaviour
                     break;
             }
         }
-
         else if (cardType == 2)
         {
             switch (n.shape)
@@ -122,6 +122,7 @@ public class putWall : MonoBehaviour
             }
         }
 
+        // 겹치지 않는다면 장애물 처리해봄
         if (checkPos == true)
         {
             switch (cardType)
@@ -186,8 +187,15 @@ public class putWall : MonoBehaviour
                     break;
             }
 
-            if(gridview.minIndex < 0) // 길 못찾는 경우
+            // 그리고 길을 찾아봄
+            gridview.Reset();
+            gridview.JPS();
+
+            // 그랬는데 길을 못찼았다면
+            if(gridview.minIndex < 0)
             {
+                print("벽 설치 취소");
+                card.On_ErrorUI(0);
                 canPut = false;
                 switch (cardType)
                 {
@@ -250,13 +258,18 @@ public class putWall : MonoBehaviour
                         }
                         break;
                 }
-            }// 길 못 찾는 경우 if
+
+                // 그리고 길을 찾아 원상태로 돌아감
+                gridview.Reset();
+                gridview.JPS();
+            }
+            // 길을 찾았다면 그대로 벽설치 진행
             else
             {
                 canPut = true;
                 put(column, row);
             }
-        }// 설치했을 때 길찾기 가능?
+        }
     }
 
     void put(int column, int row)

@@ -9143,7 +9143,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1b999620ec26948b7863337af2c1b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTest: 0
   isGame: 1
   isPause: 0
   isCurse: 0
@@ -10491,7 +10490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc58d7484fce13c4699ab26438b180ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTest: 1
+  istest: 1
   SuffleTime: 20
   BlinkTime: 5
   DrawTime: 0.2

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class N_CardDeckSys : MonoBehaviour
 {
 
+    public bool istest;
     public static bool isTest;                  // 테스트 모드 : 카드 덱 상태를 Inspector창에서 설정
     public float SuffleTime = 20, BlinkTime = 5, DrawTime = 0.2f;
     public int MaxEnergy = 100;  // 에너지 최대치
@@ -36,7 +37,7 @@ public class N_CardDeckSys : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        isTest = istest;
         // test상황이면 Inspector창에서 설정한 값으로 덱 상태 설정.
         // 아니면 N_PlayerInfo 스크립트 상에 설정된 값을 불러옴.
         if (!isTest)

@@ -277,27 +277,12 @@ public class BlockScript : MonoBehaviour
             {
                 case 0:
                     put.checkAble(nodeReference.pos.column, nodeReference.pos.row, 0);
-                    if (put.canPut)
-                    {
-                        gridView.Reset();
-                        gridView.JPS();
-                    }
                     break;
                 case 1:
                     put.checkAble(nodeReference.pos.column, nodeReference.pos.row, 1);
-                    if (put.canPut)
-                    {
-                        gridView.Reset();
-                        gridView.JPS();
-                    }
                     break;
                 case 2:
                     put.checkAble(nodeReference.pos.column, nodeReference.pos.row, 2);
-                    if (put.canPut)
-                    {
-                        gridView.Reset();
-                        gridView.JPS();
-                    }
                     break;
             }
         }
