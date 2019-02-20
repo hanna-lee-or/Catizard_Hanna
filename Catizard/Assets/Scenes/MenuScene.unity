@@ -409,7 +409,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1912889965}
-          m_MethodName: GotoGame
+          m_MethodName: GotoGame_Easy
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1047,8 +1047,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 218.5, y: -32.200012}
-  m_SizeDelta: {x: 130.46002, y: 52.149994}
+  m_AnchoredPosition: {x: 212.68, y: -32.200012}
+  m_SizeDelta: {x: 163.63, y: 52.15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &532309699
 MonoBehaviour:
@@ -1083,7 +1083,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Hard
+  m_Text: "Test \uBAA8\uB4DC"
 --- !u!222 &532309700
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2398,8 +2398,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -106.8, y: -32.200043}
-  m_SizeDelta: {x: 130.46002, y: 52.149994}
+  m_AnchoredPosition: {x: -104.11, y: -32.200043}
+  m_SizeDelta: {x: 169.9, y: 52.15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2092358183
 MonoBehaviour:
@@ -2434,7 +2434,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Easy
+  m_Text: "Easy \uBAA8\uB4DC"
 --- !u!222 &2092358184
 CanvasRenderer:
   m_ObjectHideFlags: 0

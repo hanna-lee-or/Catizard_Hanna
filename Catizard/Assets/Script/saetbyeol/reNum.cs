@@ -24,7 +24,6 @@ public class reNum : MonoBehaviour // 스페이스바 누르는 횟수
         {
             n++; // n값 1 증가
             spaceNum = n % 4; // n module 4 ( 0도 90도 180도 270도)
-            Debug.Log(spaceNum);
             shape = spaceNum;
             switch (shape)
             {

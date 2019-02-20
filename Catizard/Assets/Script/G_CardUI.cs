@@ -56,6 +56,7 @@ public class G_CardUI : MonoBehaviour
             CardUI[i].SetActive(false);
         }
 
+        print(num);
         CardUI[num].SetActive(true);
     }
 

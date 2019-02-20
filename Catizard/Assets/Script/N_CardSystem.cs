@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class N_CardSystem : MonoBehaviour
 {
 
-    public bool isTest,  isGame = true, isPause = false, isCurse = false, isProvoke = false;
-    public bool isSOS = false, isWild = false, isCatnip = false, isCatnipOn = false;
+    public bool isGame = true, isPause = false, isCurse = false, isProvoke = false;
+    public bool isSOS = false, isWild = false, isCatnip = false, isCatnipOn = false, isScrow = false, isScrowOn = false;
     public int GameMinute = 5, HeroSpeed = 1, cat_wait = 4, Cat_num_prev = 0, Cat_num_curr = 0, provoke_time = 18;
     public int total_gold = 300, bonus_gold = 0, remain_time = 0, RemainPath = 0, skill_hard = 5, skill_normal = 10;
     public Slider HeroSlider;
@@ -29,6 +29,8 @@ public class N_CardSystem : MonoBehaviour
     public Image Claw;
     public GameObject[] catnip;
     public Transform[] catnipXY;
+    public GameObject[] scrow;
+    public Transform[] scrowXY;
     public N_CardDeckSys CDS;
     public Text goldText, timeText_C, timeText_O;
     public GameObject Game_clear, Game_Over;
@@ -36,7 +38,7 @@ public class N_CardSystem : MonoBehaviour
     public removeWall rw;
     public int wallCard;
 
-    private int catnipIndex = 0, maxCatnip, SOS_repeat = 0, Provoke_repeat = 0;
+    private int catnipIndex = 0, scrowIndex = 0, maxCatnip, maxScrow, SOS_repeat = 0, Provoke_repeat = 0;
     private bool countRest = false;
     private float blockSize, blockBuffer;
     private Point next = new Point(6, 0);
@@ -44,12 +46,12 @@ public class N_CardSystem : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        isTest = CDS.isTest;
         wallCard = -1;
         blockSize = gridView.blockSize;
         blockBuffer = gridView.blockBuffer;
         HeroSlider.maxValue = GameMinute * 120;
         maxCatnip = catnip.Length;
+        maxScrow = scrow.Length;
         StartCoroutine("HeroTimer");
         StartCoroutine("CatMove");
         graphic_change(0);
@@ -83,6 +85,11 @@ public class N_CardSystem : MonoBehaviour
             if (HeroSlider.value <= 0)
             {
                 isGame = false;
+                gridView.isGame = false;
+                yield return new WaitForSeconds(1f);
+                gridView.JPS();
+                yield return new WaitForSeconds(1f);
+                Win();
             }
             if (HeroSlider.value < HeroSlider.maxValue && isCurse)
             {
@@ -134,6 +141,17 @@ public class N_CardSystem : MonoBehaviour
         SceneManager.LoadScene("MenuScene");
     }
 
+    // 재시작
+    public void RestartEasy()
+    {
+        SceneManager.LoadScene("CardSystem");
+    }
+
+    public void RestartHard()
+    {
+        SceneManager.LoadScene("TestSystem");
+    }
+
     // 카드 기능 함수
     public void CardFunction(int num)
     {
@@ -159,6 +177,9 @@ public class N_CardSystem : MonoBehaviour
                 break;
             case 4:
                 provoke();
+                break;
+            case 5:
+                On_Scrow();
                 break;
             case 6:
                 On_Catnip();
@@ -262,16 +283,25 @@ public class N_CardSystem : MonoBehaviour
             // 캣잎에 닿았다면
             if (isCatnipOn)
             {
-                isCatnipOn = false;
                 graphic_change(4);
                 int stopTime = Random.Range(4, 7);
                 print("캣잎 : 4 + " + stopTime + "초 추가 정지");
                 yield return new WaitForSeconds(4 + stopTime);
+                isCatnipOn = false;
                 // 도발상태였다면 도발 이미지로 변경
                 if (isProvoke)
                     graphic_change(2);
                 else
                     graphic_change(0);
+            }
+            // 허수아비에 닿았다면
+            else if (isScrowOn)
+            {
+                graphic_change(3);
+                CDS.Energy += 15;
+                CDS.EnergyText.text = "" + CDS.Energy;
+                SP_Slider.value -= 15;
+                yield return new WaitForSeconds(4);
             }
             else
             {
@@ -320,9 +350,12 @@ public class N_CardSystem : MonoBehaviour
                 Cat.position = new Vector3(xSize-7.4f, ySize+2.3f, 5); // 수동으로 변경할 부분 좌표계
                 yield return new WaitForSeconds(0.000000001f);
             }
+
+            // 마법사가 맨 오른쪽 칸에 도달한다면 게임종료
             if (next.column == 36)
             {
                 isGame = false;
+                gridView.isGame = false;
                 Lose();
             }
         }
@@ -330,7 +363,7 @@ public class N_CardSystem : MonoBehaviour
     }
 
     // 마법사 sprite 변경
-    void graphic_change(int curr)
+    public void graphic_change(int curr)
     {
         for (int i = 0; i < Cat_graphic.Length; i++)
         {
@@ -520,25 +553,112 @@ public class N_CardSystem : MonoBehaviour
         }
     }
 
+    // 허수아비 카드 함수
+    public void On_Scrow()
+    {
+        isScrow = true;
+        CardCover.SetActive(true);
+        UIArray_N[1].SetActive(true);
+    }
+
+    public void CreateScrow(int column, int row)
+    {
+        // 고양이 주변에는 허수아비 설치 불가
+        if (next.column - 2 <= column && column <= next.column + 2 && next.row - 2 <= row && row <= next.row + 2)
+        {
+            On_ErrorUI(0);
+            return;
+        }
+
+        isScrow = false;
+        bool isColumn = column % 2 == 1 ? true : false;
+        bool isRow = row % 2 == 1 ? true : false;
+        float xSize = 0, ySize = 0;
+
+        // 위치 지정
+        if (isColumn)
+        {
+            xSize = (column + 1) * 0.5f * (blockSize * 7f + blockBuffer) - blockSize * 3f;
+        }
+        else
+        {
+            xSize = column * 0.5f * (blockSize * 7f + blockBuffer) + blockSize;
+        }
+        if (isRow)
+        {
+            ySize = (row + 1) * 0.5f * -(blockSize * 7f + blockBuffer) + blockSize * 3f;
+        }
+        else
+        {
+            ySize = row * 0.5f * -(blockSize * 7f + blockBuffer) - blockSize;
+        }
+        scrow[scrowIndex].SetActive(true);
+        scrowXY[scrowIndex].position = new Vector3(xSize - 7.325f, ySize + 2.275f, 5f);
+
+        StartCoroutine("Check_Scrow", scrowIndex);
+
+    }
+
+    IEnumerator Check_Scrow(int index)
+    {
+        yield return new WaitForSeconds(0.0000000001f);
+        // 허수아비가 설치된 곳에 캣닢 또는 허수아비가 있지 않다면 정상작동
+        if (!isScrow)
+        {
+            UIArray_N[1].SetActive(false);
+            CardCover.SetActive(false);
+            scrowIndex = (scrowIndex + 1) % maxScrow;
+            yield return new WaitForSeconds(15f);
+            scrow[index].SetActive(false);
+            if (isScrowOn)
+            {
+                print("허수아비 =/=> 고양이");
+                isScrowOn = false;
+                // 도발상태였다면 도발 이미지로 변경
+                if (isProvoke)
+                    graphic_change(2);
+                else
+                    graphic_change(0);
+            }
+        }
+        // 아니라면 허수아비설치 취소 및 에러창 생성
+        else
+        {
+            scrow[index].SetActive(false);
+            On_ErrorUI(0);
+        }
+    }
+
     // 플레이어가 이겼을 때
     public void Win()
     {
         Game_clear.SetActive(true);
-        bonus_gold = (gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex - 1) * 40;
-        StartCoroutine("Clear");
+        int pathCount = gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex;
+        bonus_gold = (pathCount - 1) * 40;
+        StartCoroutine("Clear", pathCount);
     }
 
-    IEnumerator Clear()
+    IEnumerator Clear(int pathCount)
     {
         //Clear_window.SetActive(true);
-        for (int i = 0; i < bonus_gold; i++)
-        {
-            total_gold++;
-            goldText.text = "" + total_gold;
-            yield return new WaitForSeconds(0.01f);
-        }
-        remain_time = 4 * (gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex);
+        remain_time = 4 * pathCount;
         timeText_C.text = "" + remain_time;
+        yield return new WaitForSeconds(1f);
+        while (bonus_gold >= total_gold)
+        {
+            if (bonus_gold - total_gold > 10)
+            {
+                total_gold += 10;
+                goldText.text = "" + total_gold;
+                yield return new WaitForSeconds(0.02f);
+            }
+            else
+            {
+                total_gold++;
+                goldText.text = "" + total_gold;
+                yield return new WaitForSeconds(0.01f);
+            }
+        }
         N_PlayerInfo.Gold += total_gold;
     }
 
@@ -554,8 +674,8 @@ public class N_CardSystem : MonoBehaviour
     //스킬 사용 타이밍 판단 함수
     public void CatSkill()
     {
-        // 도발상태일때는 스킬을 사용하지 않는다.
-        if (isWild)
+        // 도발상태, 캣닢상태일때는 스킬을 사용하지 않는다.
+        if (isWild || isCatnipOn)
             return;
 
         RemainPath = gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex;
@@ -578,7 +698,8 @@ public class N_CardSystem : MonoBehaviour
                 Cat_curse();
             }
         }
-        else if(countRest)
+        // 허수아비 위에서는 휴식 스킬 사용 X
+        else if(countRest && !isScrowOn)
         {
             print("휴식");
             Cat_rest();

@@ -27,15 +27,15 @@ public class N_StartStory : MonoBehaviour, IPointerDownHandler
     // 초기 플레이어 덱 세팅
     public void CardSetting()
     {
-        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.block1] = 8;
+        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.block1] = 5;
         N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.block2] = 1;
         N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.block3] = 1;
-        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.wild] = 1;
-        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.provoke] = 1;
-        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.scarecrow] = 1;
+        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.wild] = 2;
+        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.provoke] = 2;
+        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.scarecrow] = 2;
         N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.catnip] = 4;
-        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.SOS] = 2;
-        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.removeBlock] = 6;
+        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.SOS] = 5;
+        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.removeBlock] = 3;
         N_PlayerInfo.CardSum = 0;
         for (int i = 0; i < 9; i++)
         {

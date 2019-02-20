@@ -6,6 +6,8 @@ TagManager:
   tags:
   - catnip
   - cat
+  - scrow
+  - scrowCenter
   layers:
   - Default
   - TransparentFX

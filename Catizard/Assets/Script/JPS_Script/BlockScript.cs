@@ -237,7 +237,7 @@ public class BlockScript : MonoBehaviour
 		if (nodeReference == null ) return;                                // If a Node Reference wasn't given, then don't do anything
         
         // 테스트용
-        if (card.isTest && (BlockType == 1 || BlockType == 2))
+        if (N_CardDeckSys.isTest && (BlockType == 1 || BlockType == 2))
         {
             nodeReference.isObstacle = !nodeReference.isObstacle;    // flip obstacles
             setupDisplay();
@@ -254,6 +254,20 @@ public class BlockScript : MonoBehaviour
             else
             {
                 card.CreateCatnip(nodeReference.pos.column, nodeReference.pos.row);
+            }
+        }
+        // 허수아비
+        else if (BlockType == 3 && card.isScrow)
+        {
+            int x = nodeReference.pos.column, y = nodeReference.pos.row;
+            // 허수아비는 추가로 보드 모서리 쪽에 설치 X
+            if (nodeReference.isObstacle || x == 0 || x == 36 || y == 0 || y == 12)
+            {
+                card.On_ErrorUI(0);
+            }
+            else
+            {
+                card.CreateScrow(x, y);
             }
         }
         // 벽관련

@@ -30,7 +30,7 @@ public class GridView : MonoBehaviour
     private BlockScript[] GoalPoint = new BlockScript[7];
 
     // 필요 변수 선언
-    public bool isPrint = false, isPath = true, isChange = false;
+    public bool isGame = true, isPrint = false, isPath = true, isChange = false;
     public int start_x = 0, start_y=0, temp_x = 0, temp_y = 6, end_x = 36, end_y;
     public int[] last_column = new int[7] { 0, 1, 2, 3, 4, 5, 6 };
     public List<Point>[] CatPath = new List<Point>[7];
@@ -331,12 +331,7 @@ public class GridView : MonoBehaviour
         // 다음 단계로
         if (isPrint)
         {
-            //for (int i = 0; i<7; i++)
-            //{
-            //    end_y = end_column[i];
-                
-                BeginPathFind();
-            //}
+            BeginPathFind();
         }
 	}
 
@@ -438,7 +433,8 @@ public class GridView : MonoBehaviour
         {
             print("길이 존재하지 않습니다.");
         }
-        else
+        // 테스트 중이거나 게임이 끝났다면 길 표시
+        else if (N_CardDeckSys.isTest || !isGame)
         {
             _pathRenderer.drawPath(CatPath[minIndex]);    // Draw Path on Screen
         }

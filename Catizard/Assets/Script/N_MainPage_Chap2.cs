@@ -33,14 +33,19 @@ public class N_MainPage_Chap2 : MonoBehaviour, IPointerDownHandler
         }
         else
         {
-            GotoGame();
+            GotoGame_Hard();
         }
     }
 
     // 게임 진행 씬으로 이동
-    public void GotoGame()
+    public void GotoGame_Easy()
     {
         SceneManager.LoadScene("CardSystem");
+    }
+
+    public void GotoGame_Hard()
+    {
+        SceneManager.LoadScene("TestSystem");
     }
 
     // 챕터2 해금

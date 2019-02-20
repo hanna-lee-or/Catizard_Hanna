@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class N_CardDeckSys : MonoBehaviour
 {
 
-    public bool isTest;                  // 테스트 모드 : 카드 덱 상태를 Inspector창에서 설정
+    public static bool isTest;                  // 테스트 모드 : 카드 덱 상태를 Inspector창에서 설정
     public float SuffleTime = 20, BlinkTime = 5, DrawTime = 0.2f;
     public int MaxEnergy = 100;  // 에너지 최대치
     public int TotalCard;               // 총 카드 수
@@ -16,7 +16,7 @@ public class N_CardDeckSys : MonoBehaviour
     public Text CardNText, EnergyText;
     public Animator EnergyAnimator;
     public Animator[] CardAnimator;
-    private int CardN, CardIndex, Energy;     // 남은 카드 수, 에너지양
+    public int CardN, CardIndex, Energy;     // 남은 카드 수, 에너지양
     public GameObject[] WhiteMark;
     public Image[] CardImage;
     public GameObject[] CardObject;
@@ -88,6 +88,12 @@ public class N_CardDeckSys : MonoBehaviour
             {
                 CS.isCatnip = false;
                 CS.UIArray_N[0].SetActive(false);
+                CS.CardCover.SetActive(false);
+            }
+            if (CS.isScrow)
+            {
+                CS.isScrow = false;
+                CS.UIArray_N[1].SetActive(false);
                 CS.CardCover.SetActive(false);
             }
             if (CS.isWild)
@@ -245,7 +251,11 @@ public class N_CardDeckSys : MonoBehaviour
         if (Energy < e)
             return false;
 
-        Energy -= e;
+        if (!CS.isWild)
+        {
+            Energy -= e;
+        }
+        
         EnergyText.text = "" + Energy;
         return true;
     }

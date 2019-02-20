@@ -74,7 +74,7 @@ public class N_CardEvent : MonoBehaviour
                 CDS.CS.On_ErrorUI(1);
                 return;
             }
-            if (CDS.SetEnergy(energy))
+            if (CDS.CS.isWild || CDS.SetEnergy(energy))
             {
                 CDS.RemoveInfo();
                 CDS.ClickLeftCard(number);

@@ -35,6 +35,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CardSystem.unity
     guid: 86a8d7bfb530f944eb59948af0060633
+  - enabled: 1
+    path: Assets/Scenes/TestSystem.unity
+    guid: f7929cf650b226044bc4b4f098c516ac
   - enabled: 0
     path: Assets/Scenes/StoryBookScene.unity
     guid: d507f890a1b4abf46a9188da3ff6573a

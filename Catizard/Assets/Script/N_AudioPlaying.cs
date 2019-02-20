@@ -26,10 +26,10 @@ public class N_AudioPlaying : MonoBehaviour
         GetComponent<AudioSource>().Play();
     }
 
-    // CardSystem 씬에 들어가면 제거
+    // 카드게임 씬에 들어가면 제거
     private void OnLevelWasLoaded(int level)
     {
-        if (level == 8)
+        if (level == 8 || level == 9)
             Destroy(gameObject);
     }
 
