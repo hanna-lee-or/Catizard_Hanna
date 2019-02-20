@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   passableSprite: {fileID: 21300006, guid: 90df5520ddca7c642bdb14f8d052b699, type: 3}
-  obstacleSprite: {fileID: 21300000, guid: 751c1e9ddbcdccb408d2b793bc3bb520, type: 3}
+  obstacleSprite: {fileID: 21300000, guid: d040f2f95d319d54ea508c3da21a41d5, type: 3}
   northDistanceText: {fileID: 2437773055073115630}
   northEastDistanceText: {fileID: 2437773055073184604}
   eastDistanceText: {fileID: 2437773055073180100}

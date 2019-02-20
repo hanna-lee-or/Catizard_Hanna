@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class N_CardSystem : MonoBehaviour
 {
 
-    public bool isGame = true, isPause = false, isCurse = false, isProvoke = false;
+    public bool isTest,  isGame = true, isPause = false, isCurse = false, isProvoke = false;
     public bool isSOS = false, isWild = false, isCatnip = false, isCatnipOn = false;
     public int GameMinute = 5, HeroSpeed = 1, cat_wait = 4, Cat_num_prev = 0, Cat_num_curr = 0, provoke_time = 18;
     public int total_gold = 300, bonus_gold = 0, remain_time = 0, RemainPath = 0, skill_hard = 5, skill_normal = 10;
@@ -23,8 +23,8 @@ public class N_CardSystem : MonoBehaviour
     public GameObject CardCover;
     public Image[] White_Card;
     public GameObject[] UIArray_N;
-    public GameObject UIArray_E;
-    public Image UIImage_E;
+    public GameObject[] UIArray_E;
+    public Image[] UIImage_E;
     public GameObject OptionScreen, FakeBoard, RedObj, ClawObj;
     public Image Claw;
     public GameObject[] catnip;
@@ -44,6 +44,7 @@ public class N_CardSystem : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        isTest = CDS.isTest;
         wallCard = -1;
         blockSize = gridView.blockSize;
         blockBuffer = gridView.blockBuffer;
@@ -66,6 +67,13 @@ public class N_CardSystem : MonoBehaviour
     {
         Vector3 temp = Cat.position;
         SP_bar.position = new Vector3(temp.x + 0.05f, temp.y - 0.4f);
+
+        // Escape 또는 Q가 눌리면 일시정지와 함께 옵션창 열기
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Q))
+        {
+            OptionOn();
+            print("end button");
+        }
     }
 
     IEnumerator HeroTimer()
@@ -133,12 +141,18 @@ public class N_CardSystem : MonoBehaviour
         {
             case 0:
                 wallCard = 0;
+                CardCover.SetActive(true);
+                UIArray_N[2].SetActive(true);
                 break;
             case 1:
                 wallCard = 1;
+                CardCover.SetActive(true);
+                UIArray_N[2].SetActive(true);
                 break;
             case 2:
                 wallCard = 2;
+                CardCover.SetActive(true);
+                UIArray_N[2].SetActive(true);
                 break;
             case 3:
                 wild();
@@ -155,6 +169,8 @@ public class N_CardSystem : MonoBehaviour
             case 8:
                 wallCard = 8;
                 rw.canRemove = true;
+                CardCover.SetActive(true);
+                UIArray_N[3].SetActive(true);
                 break;
         }
     }
@@ -419,23 +435,23 @@ public class N_CardSystem : MonoBehaviour
     IEnumerator On_UI(int num)
     {
         float valueA = 1;
-        UIArray_E.SetActive(true);
+        UIArray_E[num].SetActive(true);
         yield return new WaitForSeconds(0.1f);
         // 그 UI 이미지가 점점 투명해지다가 꺼지게 한다.
         for (int i = 1; i <= 10; i++)
         {
             yield return new WaitForSeconds(0.1f);
             valueA -= 0.1f;
-            UIImage_E.color = new Color(1, 1, 1, valueA);
+            UIImage_E[num].color = new Color(1, 1, 1, valueA);
         }
-        UIArray_E.SetActive(false);
+        UIArray_E[num].SetActive(false);
     }
 
     // 에러UI 띄우기
-    public void On_ErrorUI()
+    public void On_ErrorUI(int num)
     {
         StopCoroutine("On_UI");
-        StartCoroutine("On_UI", 0);
+        StartCoroutine("On_UI", num);
     }
 
     // 뇌물 카드 함수
@@ -451,7 +467,7 @@ public class N_CardSystem : MonoBehaviour
         // 고양이 주변에는 캣닢 설치 불가
         if (next.column - 2 <= column && column <= next.column + 2 && next.row - 2 <= row && row <= next.row + 2)
         {
-            On_ErrorUI();
+            On_ErrorUI(0);
             return;
         }
 
@@ -500,7 +516,7 @@ public class N_CardSystem : MonoBehaviour
         else
         {
             catnip[index].SetActive(false);
-            On_ErrorUI();
+            On_ErrorUI(0);
         }
     }
 
@@ -538,6 +554,10 @@ public class N_CardSystem : MonoBehaviour
     //스킬 사용 타이밍 판단 함수
     public void CatSkill()
     {
+        // 도발상태일때는 스킬을 사용하지 않는다.
+        if (isWild)
+            return;
+
         RemainPath = gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex;
         
         if (skill_hard <= RemainPath && SP_Slider.value>=80)

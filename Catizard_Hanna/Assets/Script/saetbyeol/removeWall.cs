@@ -100,6 +100,8 @@ public class removeWall : MonoBehaviour
         gridview.Reset();
         gridview.JPS();
         card.wallCard = -1;
+        card.CardCover.SetActive(false);
+        card.UIArray_N[3].SetActive(false);
         canRemove = false;
     }
 }

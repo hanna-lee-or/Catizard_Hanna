@@ -296,6 +296,8 @@ public class putWall : MonoBehaviour
             wallList[last++].SetActive(true);
             card.wallCard = -1;
             bIndex = -1;
+            card.CardCover.SetActive(false);
+            card.UIArray_N[2].SetActive(false);
         }
         else if (cardType == 1)
         {
@@ -310,10 +312,12 @@ public class putWall : MonoBehaviour
             wallList[last++].SetActive(true);
             card.wallCard = -1;
             bIndex = -1;
+            card.CardCover.SetActive(false);
+            card.UIArray_N[2].SetActive(false);
         }
         else if (cardType == 2)
         {
-            putPosition = new Vector3(xSize - 7.36f, ySize + 2.33f);
+            putPosition = new Vector3(xSize - 7.35f, ySize + 2.28f);
 
             wallList.Add(Instantiate(wall3, putPosition, Quaternion.identity) as GameObject);
             wallList[last].transform.Rotate(0, 0, -90 * n.shape);
@@ -324,6 +328,8 @@ public class putWall : MonoBehaviour
             wallList[last++].SetActive(true);
             card.wallCard = -1;
             bIndex = -1;
+            card.CardCover.SetActive(false);
+            card.UIArray_N[2].SetActive(false);
         }
     }
 }

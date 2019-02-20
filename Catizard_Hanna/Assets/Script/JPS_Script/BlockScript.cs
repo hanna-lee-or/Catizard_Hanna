@@ -237,7 +237,7 @@ public class BlockScript : MonoBehaviour
 		if (nodeReference == null ) return;                                // If a Node Reference wasn't given, then don't do anything
         
         // 테스트용
-        if (BlockType == 1 || BlockType == 2)
+        if (card.isTest && (BlockType == 1 || BlockType == 2))
         {
             nodeReference.isObstacle = !nodeReference.isObstacle;    // flip obstacles
             setupDisplay();
@@ -249,7 +249,7 @@ public class BlockScript : MonoBehaviour
         {
             if (nodeReference.isObstacle)
             {
-                card.On_ErrorUI();
+                card.On_ErrorUI(0);
             }
             else
             {

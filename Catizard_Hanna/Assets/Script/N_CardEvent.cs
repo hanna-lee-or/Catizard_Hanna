@@ -68,6 +68,12 @@ public class N_CardEvent : MonoBehaviour
         // 마우스 왼쪽인 경우
         if (Input.GetMouseButtonUp(0))
         {
+            if (cardType == 8 && CDS.pw.wallList.Count <= 0)
+            {
+                // 에러창을 띄운다.
+                CDS.CS.On_ErrorUI(1);
+                return;
+            }
             if (CDS.SetEnergy(energy))
             {
                 CDS.RemoveInfo();

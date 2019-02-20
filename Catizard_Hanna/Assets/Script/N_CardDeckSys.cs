@@ -28,6 +28,8 @@ public class N_CardDeckSys : MonoBehaviour
     public Animator[] Removed_Animator;
     public GameObject[] DeckObject;
 
+    public putWall pw;
+
     private int left, right, total;
     private bool isCardFuc = true;
 
@@ -82,7 +84,6 @@ public class N_CardDeckSys : MonoBehaviour
         {
             TimeToSleep = SuffleTime - BlinkTime - (DrawTime * 5) - 1;
             // 카드를 버린다. 카드 함수 진행 상황을 중단한다.
-          
             if (CS.isCatnip)
             {
                 CS.isCatnip = false;
@@ -94,6 +95,13 @@ public class N_CardDeckSys : MonoBehaviour
                 CS.isWild = false;
                 CS.UIArray_N[4].SetActive(false);
                 CS.WhiteColorChange(1);
+            }
+            if (CS.wallCard >= 0)
+            {
+                CS.wallCard = -1;
+                CS.UIArray_N[2].SetActive(false);
+                CS.UIArray_N[3].SetActive(false);
+                CS.CardCover.SetActive(false);
             }
             RemoveInfo();
             N_CardEvent.isPress = false;

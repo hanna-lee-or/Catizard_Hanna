@@ -56,11 +56,11 @@ public class Preview : MonoBehaviour
                 wallPre1.SetActive(true);
                 break;
             case 1:
-                wallPre2.transform.position = new Vector3(xSize - 7.353f, ySize + 2.30f);
+                wallPre2.transform.position = new Vector3(xSize - 7.353f, ySize + 2.3f);
                 wallPre2.SetActive(true);
                 break;
             case 2:
-                wallPre3.transform.position = new Vector3(xSize - 7.36f, ySize + 2.33f);
+                wallPre3.transform.position = new Vector3(xSize - 7.35f, ySize + 2.28f);
                 wallPre3.SetActive(true);
                 break;
         }
