@@ -1293,7 +1293,9 @@ MonoBehaviour:
   gridView: {fileID: 0}
   BlockType: 3
   d: {fileID: 0}
-  NCS: {fileID: 0}
+  put: {fileID: 0}
+  remove: {fileID: 0}
+  card: {fileID: 0}
   isPathEndPoint: 0
 --- !u!1 &187116
 GameObject:

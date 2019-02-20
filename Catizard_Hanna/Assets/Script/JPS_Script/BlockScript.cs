@@ -35,8 +35,10 @@ public class BlockScript : MonoBehaviour
 	public Node nodeReference = null;
 	public GridView gridView;
     public int BlockType;
-    public dotActive d;
-    public N_CardSystem NCS;
+    public Preview d;
+    public putWall put;
+    public removeWall remove;
+    public N_CardSystem card;
 
 	public bool isPathEndPoint = false;
 
@@ -233,7 +235,8 @@ public class BlockScript : MonoBehaviour
 	void OnMouseDown()
 	{
 		if (nodeReference == null ) return;                                // If a Node Reference wasn't given, then don't do anything
-
+        
+        // 테스트용
         if (BlockType == 1 || BlockType == 2)
         {
             nodeReference.isObstacle = !nodeReference.isObstacle;    // flip obstacles
@@ -241,15 +244,47 @@ public class BlockScript : MonoBehaviour
             gridView.Reset();
             gridView.JPS();
         }
-        else if (BlockType == 3 && NCS.isCatnip)
+        // 캣닢
+        else if (BlockType == 3 && card.isCatnip)
         {
             if (nodeReference.isObstacle)
             {
-                NCS.On_ErrorUI();
+                card.On_ErrorUI();
             }
             else
             {
-                NCS.CreateCatnip(nodeReference.pos.column, nodeReference.pos.row);
+                card.CreateCatnip(nodeReference.pos.column, nodeReference.pos.row);
+            }
+        }
+        // 벽관련
+        else if (BlockType == 0)
+        {
+            switch (card.wallCard)
+            {
+                case 0:
+                    put.checkAble(nodeReference.pos.column, nodeReference.pos.row, 0);
+                    if (put.canPut)
+                    {
+                        gridView.Reset();
+                        gridView.JPS();
+                    }
+                    break;
+                case 1:
+                    put.checkAble(nodeReference.pos.column, nodeReference.pos.row, 1);
+                    if (put.canPut)
+                    {
+                        gridView.Reset();
+                        gridView.JPS();
+                    }
+                    break;
+                case 2:
+                    put.checkAble(nodeReference.pos.column, nodeReference.pos.row, 2);
+                    if (put.canPut)
+                    {
+                        gridView.Reset();
+                        gridView.JPS();
+                    }
+                    break;
             }
         }
 
@@ -257,13 +292,17 @@ public class BlockScript : MonoBehaviour
 
     void OnMouseOver()
     {
-        if (cardMake.clickMake && BlockType == 0)
-            d.wallPreview(nodeReference.pos.column, nodeReference.pos.row);    
+        if (BlockType == 0)
+        {
+            if (card.wallCard == 0 || card.wallCard == 1 || card.wallCard == 2)
+                d.wallPreview(nodeReference.pos.column, nodeReference.pos.row, card.wallCard);
+        }
     }
 
     void OnMouseExit()
     {
-        d.exitPreview();
+        if (BlockType == 0)
+            d.exitPreview();
     }
 
     // Use this for initialization

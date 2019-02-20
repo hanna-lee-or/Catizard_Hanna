@@ -30,16 +30,21 @@ public class N_CardSystem : MonoBehaviour
     public GameObject[] catnip;
     public Transform[] catnipXY;
     public N_CardDeckSys CDS;
-    public Text goldText, timeText;
+    public Text goldText, timeText_C, timeText_O;
     public GameObject Game_clear, Game_Over;
 
+    public removeWall rw;
+    public int wallCard;
+
     private int catnipIndex = 0, maxCatnip, SOS_repeat = 0, Provoke_repeat = 0;
+    private bool countRest = false;
     private float blockSize, blockBuffer;
     private Point next = new Point(6, 0);
 
     // Start is called before the first frame update
     void Awake()
     {
+        wallCard = -1;
         blockSize = gridView.blockSize;
         blockBuffer = gridView.blockBuffer;
         HeroSlider.maxValue = GameMinute * 120;
@@ -50,6 +55,7 @@ public class N_CardSystem : MonoBehaviour
         RedObj.SetActive(false);
         ClawObj.SetActive(false);
         CardCover.SetActive(false);
+        SP_Slider.value = 0;
         for(int i = 0; i < maxCatnip; i++)
         {
             catnip[i].SetActive(false);
@@ -125,6 +131,15 @@ public class N_CardSystem : MonoBehaviour
     {
         switch (num)
         {
+            case 0:
+                wallCard = 0;
+                break;
+            case 1:
+                wallCard = 1;
+                break;
+            case 2:
+                wallCard = 2;
+                break;
             case 3:
                 wild();
                 break;
@@ -136,6 +151,10 @@ public class N_CardSystem : MonoBehaviour
                 break;
             case 7:
                 On_SOS();
+                break;
+            case 8:
+                wallCard = 8;
+                rw.canRemove = true;
                 break;
         }
     }
@@ -369,6 +388,7 @@ public class N_CardSystem : MonoBehaviour
 
     IEnumerator Attack()
     {
+        yield return new WaitForSeconds(2.5f);
         ClawObj.SetActive(true);
         CardCover.SetActive(true);
         Claw.fillOrigin = 1;
@@ -501,6 +521,8 @@ public class N_CardSystem : MonoBehaviour
             goldText.text = "" + total_gold;
             yield return new WaitForSeconds(0.01f);
         }
+        remain_time = 4 * (gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex);
+        timeText_C.text = "" + remain_time;
         N_PlayerInfo.Gold += total_gold;
     }
 
@@ -510,32 +532,41 @@ public class N_CardSystem : MonoBehaviour
         print("lose 함수임");
         Game_Over.SetActive(true);
         remain_time = (int)HeroSlider.value / 2;
-        timeText.text = "" + remain_time;
+        timeText_O.text = "" + remain_time;
     }
 
     //스킬 사용 타이밍 판단 함수
     public void CatSkill()
     {
         RemainPath = gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex;
-        if(skill_hard <= RemainPath)
+        
+        if (skill_hard <= RemainPath && SP_Slider.value>=80)
         {
             //폭발 스킬 쓰기
             print("폭발스킬 써야함");
         }
-        if ((skill_normal < RemainPath) && (RemainPath < skill_hard) )
+        else if (SP_Slider.value >= 30)
         {
-            print("둘 중 아무거나 써야함");
-            if (Random.Range(0, 1) == 0)
+            if (Random.Range(0, 2) == 0)
             {
+                print("공격");
                 Cat_attack();
             }
             else
             {
+                print("저주");
                 Cat_curse();
             }
         }
+        else if(countRest)
+        {
+            print("휴식");
+            Cat_rest();
+        }
 
-
+        if (!countRest)
+            countRest = true;
+        
     }
 
 }

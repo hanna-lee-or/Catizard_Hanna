@@ -115,10 +115,8 @@ public class N_CardDeckSys : MonoBehaviour
             // 에너지 회복
             Energy = MaxEnergy;
             EnergyText.text = "" + Energy;
-
-
+            
             //마법사 스킬 타이밍 판단
-
             CS.CatSkill();
             print("스킬사용판단중");
 

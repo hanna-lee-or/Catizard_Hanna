@@ -8,12 +8,14 @@ public class dotActive : MonoBehaviour
     public GridView gridView;
 
     private Transform thisTransform;
+    private int cardType;
 
     void Awake()
     {
         blockSize = gridView.blockSize;
         blockBuffer = gridView.blockBuffer;
         thisTransform = GetComponent<Transform>();
+        cardType = 0;
     }
 
     public void wallPreview(int column, int row)
@@ -40,6 +42,7 @@ public class dotActive : MonoBehaviour
         }
 
         thisTransform.position = new Vector3(xSize-7.3f, ySize+2.22f); // dot 위치로 이동
+
         gameObject.SetActive(true); // 보이게 하기
     }
 

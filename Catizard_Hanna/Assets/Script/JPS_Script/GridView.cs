@@ -21,7 +21,7 @@ public class GridView : MonoBehaviour
 
 	private GameObject[] childObjects = new GameObject[1];
 
-	private Grid grid = new Grid();
+	public Grid grid = new Grid();
 
 	public Queue< BlockScript > selectedPathPoints = new Queue< BlockScript >();
 
@@ -35,6 +35,9 @@ public class GridView : MonoBehaviour
     public int[] last_column = new int[7] { 0, 1, 2, 3, 4, 5, 6 };
     public List<Point>[] CatPath = new List<Point>[7];
     public int minIndex = -1, CatIndex = 0;
+
+    public int[] rand_x = new int[9];
+    public int[] rand_y = new int[9];
 
 
     void Start()
@@ -197,8 +200,6 @@ public class GridView : MonoBehaviour
     }
     public void Random_pos()
     {
-        int[] rand_x = new int[9];
-        int[] rand_y = new int[9];
         int x_district = 1; //첫번째 열(column==0)빼려고 1부터 초기화
         int y_district = 0;
         for (int j = 0; j < 3; j++)
@@ -421,21 +422,15 @@ public class GridView : MonoBehaviour
             if (CatPath[i] != null && tempCount != 0)
             {
                 isPath = true;
-                print(i + "번째 : 길을 찾았습니다.");
                 if (min > tempCount)
                 {
                     min = tempCount;
                     minIndex = i;
                 }
-             //   for (int i = 0; i < CatPath.Count; i++)
-              //  {
-              //      print((i + 1) + "번째 노드 : (" + CatPath[i].column + ", " + CatPath[i].row + ")");
-              //  }
             }
             else
             {
                 isPath = false;
-                print(i+"번째 : 길을 찾을 수 없습니다.");
             }
             GoalPoint[i].isPathEndPoint = false;
         }
