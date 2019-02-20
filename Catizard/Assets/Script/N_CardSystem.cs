@@ -138,17 +138,20 @@ public class N_CardSystem : MonoBehaviour
     // 메인 화면으로 이동
     public void GotoMain()
     {
+        Time.timeScale = 1;     // 일시정지 해제
         SceneManager.LoadScene("MenuScene");
     }
 
     // 재시작
     public void RestartEasy()
     {
+        Time.timeScale = 1;     // 일시정지 해제
         SceneManager.LoadScene("CardSystem");
     }
 
     public void RestartHard()
     {
+        Time.timeScale = 1;     // 일시정지 해제
         SceneManager.LoadScene("TestSystem");
     }
 
