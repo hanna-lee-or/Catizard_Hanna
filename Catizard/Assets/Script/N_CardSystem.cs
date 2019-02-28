@@ -404,6 +404,7 @@ public class N_CardSystem : MonoBehaviour
         if (SP_Slider.value < 30)
             return;
 
+        On_ErrorUI(4);
         graphic_change(1);
         isCurse = true;
         Hero.localScale = new Vector3(-1, 1, 1);
@@ -637,7 +638,7 @@ public class N_CardSystem : MonoBehaviour
             ySize = row * 0.5f * -(blockSize * 7f + blockBuffer) - blockSize;
         }
         scrow[scrowIndex].SetActive(true);
-        scrowXY[scrowIndex].position = new Vector3(xSize - 7.325f, ySize + 2.275f, 5f);
+        scrowXY[scrowIndex].position = new Vector3(xSize - 7.325f, ySize + 2.275f, -1);
 
         StartCoroutine("Check_Scrow", scrowIndex);
 
@@ -748,7 +749,9 @@ public class N_CardSystem : MonoBehaviour
     // 플레이어가 졌을 때
     public void Lose()
     {
-        print("lose 함수임");
+        print("Lose");
+        CDS.StopAllCoroutines();
+        CardCover.SetActive(true);
         Game_Over.SetActive(true);
         remain_time = (int)HeroSlider.value / 2;
         timeText_O.text = "" + remain_time;

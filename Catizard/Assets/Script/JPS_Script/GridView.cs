@@ -161,7 +161,7 @@ public class GridView : MonoBehaviour
                 ySize = row * 0.5f * -(blockSize * 7f + blockBuffer) - blockSize;
             }
             child.GetComponent<Transform>().localPosition = new Vector3(
-				xSize, ySize, 0.0f);
+				xSize, ySize, 10.0f);
 
 			grid.gridNodes[ i ] = new Node();
 			grid.gridNodes[ i ].pos  = new Point( row, column );
@@ -384,8 +384,7 @@ public class GridView : MonoBehaviour
  
         foreach (GameObject child in childObjects)
         {
-            BlockScript block_component = child.GetComponent<BlockScript>();
-            Point block_point = block_component.nodeReference.pos;
+            Point block_point = child.GetComponent<BlockScript>().nodeReference.pos;
             if (block_point.column == start_x && block_point.row == start_y)
             {
                 child.GetComponent<BlockScript>().isPathEndPoint = false;
@@ -395,7 +394,7 @@ public class GridView : MonoBehaviour
                 child.GetComponent<BlockScript>().isPathEndPoint = true;
                 start_point = child.GetComponent<BlockScript>();
             }
-            block_component.setupDisplay();
+            child.GetComponent<BlockScript>().setupDisplay();
         }
         for (int i = 0; i < 7; i++)
         {
