@@ -35,7 +35,7 @@ public class N_CardDeckSys : MonoBehaviour
     private bool isCardFuc = true;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         isTest = istest;
         // test상황이면 Inspector창에서 설정한 값으로 덱 상태 설정.
@@ -290,6 +290,24 @@ public class N_CardDeckSys : MonoBehaviour
         int CardType = HandOrder[number];
         int TempType = CardType;
         print(CardType + "번 카드 사용 (isCardFuc : " + isCardFuc + " )");
+
+        // wild 카드에 한해 수중의 카드 체크
+        if (CardType == 3)
+        {
+            bool flag = false;
+            for (int i = 0; i < 5; i++)
+            {
+                int Typei = HandOrder[i];
+                if (Typei != -1 && Typei != 3)
+                    flag = true;
+            }
+            // 복사할 카드가 없으면 에러창 띄우고 함수 취소
+            if (!flag)
+            {
+                CS.On_ErrorUI(3);
+                return;
+            }
+        }
 
         if (!CS.isWild)
         {

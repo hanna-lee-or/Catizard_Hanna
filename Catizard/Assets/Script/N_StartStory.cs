@@ -11,6 +11,8 @@ public class N_StartStory : MonoBehaviour, IPointerDownHandler
     public GameObject SkipButton;
     public GameObject START;
     public Sprite[] Story;
+    public AudioClip last;
+    public AudioSource sound;
 
     private Image StoryImage;
     private int index = 0;
@@ -49,6 +51,7 @@ public class N_StartStory : MonoBehaviour, IPointerDownHandler
         // 시작 스토리 일러스트 차례로 보여주기
         if (index < 3)
         {
+            sound.Play();
             index++;
             StoryImage.sprite = Story[index];
         }
@@ -66,6 +69,8 @@ public class N_StartStory : MonoBehaviour, IPointerDownHandler
     // 스토리 끝냄
     public void QuitStory()
     {
+        sound.clip = last;
+        sound.Play();
         index = 4;
         StoryImage.sprite = Story[index];
         SkipButton.SetActive(false);

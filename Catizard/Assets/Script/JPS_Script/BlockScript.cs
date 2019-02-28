@@ -289,19 +289,43 @@ public class BlockScript : MonoBehaviour
 
     }
 
-    void OnMouseOver()
+    void OnMouseEnter()
     {
         if (BlockType == 0)
         {
             if (card.wallCard == 0 || card.wallCard == 1 || card.wallCard == 2)
                 d.wallPreview(nodeReference.pos.column, nodeReference.pos.row, card.wallCard);
         }
+        else if (BlockType == 3 && card.isCatnip)
+        {
+            card.CatnipPreview(nodeReference.pos.column, nodeReference.pos.row);
+        }
+        else if (BlockType == 3 && card.isScrow)
+        {
+            int x = nodeReference.pos.column, y = nodeReference.pos.row;
+            // 허수아비는 추가로 보드 모서리 쪽에 설치 X
+            if (nodeReference.isObstacle || x == 0 || x == 36 || y == 0 || y == 12)
+            {
+                
+            }
+            else
+            {
+                card.ScrowPreview(nodeReference.pos.column, nodeReference.pos.row);
+            }
+        }
     }
 
     void OnMouseExit()
     {
         if (BlockType == 0)
+        {
             d.exitPreview();
+        }
+        else if (BlockType == 3)
+        {
+            card.CatnipRemove();
+            card.ScrowRemove();
+        }
     }
 
     // Use this for initialization

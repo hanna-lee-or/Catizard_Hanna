@@ -9,12 +9,20 @@ public class N_MenuBar : MonoBehaviour
 
     public Text CardSum, GoldAmount;
     public GameObject ExitUI;
+    public AudioClip click;
+    public AudioSource sound;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         GoldAmount.text = "" + N_PlayerInfo.Gold;
         CardSum.text = "" + N_PlayerInfo.CardSum;
+    }
+
+    public void PlayClick()
+    {
+        sound.clip = click;
+        sound.Play();
     }
 
     public void GotoMain()
@@ -59,11 +67,13 @@ public class N_MenuBar : MonoBehaviour
 
     public void ExitUI_On()
     {
+        PlayClick();
         ExitUI.SetActive(true);
     }
 
     public void ExitUI_Off()
     {
+        PlayClick();
         ExitUI.SetActive(false);
     }
 

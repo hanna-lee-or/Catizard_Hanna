@@ -13,6 +13,8 @@ public class N_MainPage_Chap2 : MonoBehaviour, IPointerDownHandler
     public Text GoldAmount;
     private Image Chap2Image;
     public Sprite[] Chap2;
+    public AudioClip click, unLock;
+    public AudioSource sound;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +31,7 @@ public class N_MainPage_Chap2 : MonoBehaviour, IPointerDownHandler
     {
         if (!N_PlayerInfo.UnLock)
         {
+            PlayClick();
             UnlockScreen.SetActive(true);
         }
         else
@@ -40,12 +43,12 @@ public class N_MainPage_Chap2 : MonoBehaviour, IPointerDownHandler
     // 게임 진행 씬으로 이동
     public void GotoGame_Easy()
     {
-        SceneManager.LoadScene("CardSystem");
+        SceneManager.LoadScene("TestSystem");
     }
 
     public void GotoGame_Hard()
     {
-        SceneManager.LoadScene("TestSystem");
+        SceneManager.LoadScene("CardSystem");
     }
 
     // 챕터2 해금
@@ -53,14 +56,17 @@ public class N_MainPage_Chap2 : MonoBehaviour, IPointerDownHandler
     {
         if (N_PlayerInfo.Gold >= 1000)
         {
+            sound.clip = unLock;
+            sound.Play();
             N_PlayerInfo.Gold -= 1000;
             GoldAmount.text = "" + N_PlayerInfo.Gold;
             N_PlayerInfo.UnLock = true;
             Chap2Image.sprite = Chap2[1];
-            CloseUnlockScreen();
+            UnlockScreen.SetActive(false);
         }
         else
         {
+            PlayClick();
             CloseUnlockScreen();
             StartCoroutine("Error");
         }
@@ -82,7 +88,14 @@ public class N_MainPage_Chap2 : MonoBehaviour, IPointerDownHandler
 
     public void CloseUnlockScreen()
     {
+        PlayClick();
         UnlockScreen.SetActive(false);
+    }
+
+    public void PlayClick()
+    {
+        sound.clip = click;
+        sound.Play();
     }
 
 }

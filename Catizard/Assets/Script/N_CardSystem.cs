@@ -27,6 +27,8 @@ public class N_CardSystem : MonoBehaviour
     public Image[] UIImage_E;
     public GameObject OptionScreen, FakeBoard, RedObj, ClawObj;
     public Image Claw;
+    public GameObject catnipView, scrowView;
+    public Transform catnipVxy, scrowVxy;
     public GameObject[] catnip;
     public Transform[] catnipXY;
     public GameObject[] scrow;
@@ -253,7 +255,7 @@ public class N_CardSystem : MonoBehaviour
         Provoke_repeat++;
         if (Provoke_repeat == 1)
         {
-            cat_wait = cat_wait / 2;
+            cat_wait = cat_wait - 1;
             graphic_change(2);
             SP_Slider.value = 0;
             StartCoroutine("After_provoke");
@@ -268,7 +270,7 @@ public class N_CardSystem : MonoBehaviour
             yield return new WaitForSeconds(18f);
             Provoke_repeat--;
         }
-        cat_wait = cat_wait * 2;
+        cat_wait = cat_wait + 1;
         SP_Slider.value = 0;
         graphic_change(0);
         isProvoke = false;
@@ -556,6 +558,45 @@ public class N_CardSystem : MonoBehaviour
         }
     }
 
+    // 캣닢 미리보기
+    public void CatnipPreview(int column, int row)
+    {
+        // 고양이 주변에는 캣닢 설치 불가
+        if (next.column - 2 <= column && column <= next.column + 2 && next.row - 2 <= row && row <= next.row + 2)
+        {
+            return;
+        }
+
+        bool isColumn = column % 2 == 1 ? true : false;
+        bool isRow = row % 2 == 1 ? true : false;
+        float xSize = 0, ySize = 0;
+
+        // 위치 지정
+        if (isColumn)
+        {
+            xSize = (column + 1) * 0.5f * (blockSize * 7f + blockBuffer) - blockSize * 3f;
+        }
+        else
+        {
+            xSize = column * 0.5f * (blockSize * 7f + blockBuffer) + blockSize;
+        }
+        if (isRow)
+        {
+            ySize = (row + 1) * 0.5f * -(blockSize * 7f + blockBuffer) + blockSize * 3f;
+        }
+        else
+        {
+            ySize = row * 0.5f * -(blockSize * 7f + blockBuffer) - blockSize;
+        }
+        catnipView.SetActive(true);
+        catnipVxy.position = new Vector3(xSize - 7.3f, ySize + 2.3f, 0);
+    }
+
+    public void CatnipRemove()
+    {
+        catnipView.SetActive(false);
+    }
+
     // 허수아비 카드 함수
     public void On_Scrow()
     {
@@ -630,6 +671,45 @@ public class N_CardSystem : MonoBehaviour
             scrow[index].SetActive(false);
             On_ErrorUI(0);
         }
+    }
+
+    // 허수아비 미리보기
+    public void ScrowPreview(int column, int row)
+    {
+        // 고양이 주변에는 허수아비 설치 불가
+        if (next.column - 2 <= column && column <= next.column + 2 && next.row - 2 <= row && row <= next.row + 2)
+        {
+            return;
+        }
+
+        bool isColumn = column % 2 == 1 ? true : false;
+        bool isRow = row % 2 == 1 ? true : false;
+        float xSize = 0, ySize = 0;
+
+        // 위치 지정
+        if (isColumn)
+        {
+            xSize = (column + 1) * 0.5f * (blockSize * 7f + blockBuffer) - blockSize * 3f;
+        }
+        else
+        {
+            xSize = column * 0.5f * (blockSize * 7f + blockBuffer) + blockSize;
+        }
+        if (isRow)
+        {
+            ySize = (row + 1) * 0.5f * -(blockSize * 7f + blockBuffer) + blockSize * 3f;
+        }
+        else
+        {
+            ySize = row * 0.5f * -(blockSize * 7f + blockBuffer) - blockSize;
+        }
+        scrowView.SetActive(true);
+        scrowVxy.position = new Vector3(xSize - 7.325f, ySize + 2.275f, 0);
+    }
+
+    public void ScrowRemove()
+    {
+        scrowView.SetActive(false);
     }
 
     // 플레이어가 이겼을 때

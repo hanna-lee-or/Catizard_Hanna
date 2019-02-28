@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class G_CardUI : MonoBehaviour
 {
@@ -15,6 +14,8 @@ public class G_CardUI : MonoBehaviour
     public Text[] CardText;
     public int Cardnum; //ActiveUI함수에서 카드번호 받아올 변수
     public int[] CardPrice = { 400, 350, 300, 250, 200, 150, 100 }; //상점 카드 가격
+    public AudioClip thisClip;
+    public AudioSource sound;
 
 
     // Start is called before the first frame update
@@ -48,6 +49,12 @@ public class G_CardUI : MonoBehaviour
         }
     }
 
+    public void PlayClip()
+    {
+        sound.clip = thisClip;
+        sound.Play();
+    }
+
     public void ActiveUI(int num)
     {
         Cardnum = num;
@@ -55,15 +62,13 @@ public class G_CardUI : MonoBehaviour
         {
             CardUI[i].SetActive(false);
         }
-
-        print(num);
+        
         CardUI[num].SetActive(true);
     }
 
     /*Store_1 씬에서 카드 제거할 때 실행*/
     public void YesNo(int num)
     {
-        print(Cardnum);
         CardUI[Cardnum].SetActive(false);
         if (num == 1) //yes 눌렀을 때 => 카드 제거해야함
         {
@@ -80,6 +85,7 @@ public class G_CardUI : MonoBehaviour
                         N_PlayerInfo.CardNum[Cardnum]--;
                         CardText[Cardnum].text = "X " + N_PlayerInfo.CardNum[Cardnum];
                         CardSum.text = "" + N_PlayerInfo.CardSum;
+                        PlayClip();
                     }
                     else //골드가 부족합니다.
                     {
@@ -101,14 +107,18 @@ public class G_CardUI : MonoBehaviour
         CardUI[Cardnum].SetActive(false);
         GoldAmount.text = "" + N_PlayerInfo.Gold;
         CardSum.text = "" + N_PlayerInfo.CardSum;
-        if (num == 1) //yes 눌렀을 때 => 카드 구매해야함
+
+        //yes 눌렀을 때 => 카드 구매해야함
+        if (num == 1)
         {
             if (N_PlayerInfo.Gold >= CardPrice[Cardnum]) //Gold 있는지 확인
             {
+                PlayClip();
                 N_PlayerInfo.Gold -= CardPrice[Cardnum]; //Gold 깎이고
                 GoldAmount.text = "" + N_PlayerInfo.Gold;
+                // 카드 개수 증가
                 switch (Cardnum)
-                {//카드 개수 증가
+                {
                     case 0: //wild카드
                         N_PlayerInfo.CardNum[3]++;
                         N_PlayerInfo.CardSum++;
@@ -146,13 +156,6 @@ public class G_CardUI : MonoBehaviour
                         break;
                 }
             }
-            else if (num == -1)
-            {
-                for (int i = 0; i < CardUI.Length; i++)
-                {
-                    CardUI[i].SetActive(false);
-                }
-            }
             else //골드가 부족합니다.
             {
                 StartCoroutine("Error");
@@ -172,6 +175,7 @@ public class G_CardUI : MonoBehaviour
             {
                 if (N_PlayerInfo.Gold >= 300)
                 {
+                    PlayClip();
                     N_PlayerInfo.Gold -= 300; //Gold 깎이고
                     GoldAmount.text = "" + N_PlayerInfo.Gold;
                     N_PlayerInfo.CardNum[0]--; //벽설치_ㅣ카드 감소
@@ -200,6 +204,7 @@ public class G_CardUI : MonoBehaviour
             {
                 if (N_PlayerInfo.Gold >= 400)
                 {
+                    PlayClip();
                     N_PlayerInfo.Gold -= 400; //Gold 깎이고
                     GoldAmount.text = "" + N_PlayerInfo.Gold;
                     N_PlayerInfo.CardNum[2]--; //벽설치_ㅏ카드 감소

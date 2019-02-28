@@ -51,7 +51,12 @@ public class GridView : MonoBehaviour
 
 		_pathRenderer._gridView = this;
         resize();
-	}
+        if (N_CardDeckSys.isTest)
+        {
+            JPS();
+        }
+
+    }
 
 	// Update is called once per frame
 	/*void Update () 
