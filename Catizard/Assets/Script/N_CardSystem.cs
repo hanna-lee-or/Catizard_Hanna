@@ -37,8 +37,15 @@ public class N_CardSystem : MonoBehaviour
     public Text goldText, timeText_C, timeText_O;
     public GameObject Game_clear, Game_Over;
 
-    public AudioClip S_Click, S_Reflection, S_BlockOn, S_BlockOff, S_Scrow, S_Catnip, S_Provoke, S_Attack, S_Win;
-    public AudioSource SoundA;
+    // Audio_UseCard
+    public AudioClip S_Click, S_Reflection, S_BlockOn, S_BlockOff, S_Scrow, S_Catnip, S_Provoke, S_Win;
+    // Audio_Cat
+    public AudioClip S_CatMove, S_CatMellow, S_Boom, S_Curse, S_Attack;
+    // Audio_System
+    public AudioClip S_CardDraw, S_CardLoop, S_CardRemove;
+    // Audio_Rest
+    public AudioClip S_Timer;
+    public AudioSource SoundU, SoundY, SoundC, SoundR;
 
     public removeWall rw;
     public int wallCard;
@@ -49,44 +56,100 @@ public class N_CardSystem : MonoBehaviour
     private Point next = new Point(6, 0);
 
     // 효과음
-    public void PlaySoundA(int n)
+    public void PlaySoundU(int n)
     {
         // 효과음 선택
         switch (n)
         {
             // 카드 사용
             case 12:
-                SoundA.clip = S_Win;
+                SoundU.clip = S_Win;
                 break;
             case 17:
-                SoundA.clip = S_BlockOn;
+                SoundU.clip = S_BlockOn;
                 break;
             case 18:
-                SoundA.clip = S_BlockOff;
+                SoundU.clip = S_BlockOff;
                 break;
             case 19:
-                SoundA.clip = S_Scrow;
+                SoundU.clip = S_Scrow;
                 break;
             case 20:
-                SoundA.clip = S_Provoke;
+                SoundU.clip = S_Provoke;
                 break;
             case 21:
-                SoundA.clip = S_Catnip;
-                break;
-            // 마법사 스킬
-            case 22:
-                SoundA.clip = S_Attack;
+                SoundU.clip = S_Catnip;
                 break;
             // 옵션 버튼
             case 23:
-                SoundA.clip = S_Click;
+                SoundU.clip = S_Click;
                 break;
             case 24:
-                SoundA.clip = S_Reflection;
+                SoundU.clip = S_Reflection;
                 break;
         }
         // 효과음 재생
-        SoundA.Play();
+        SoundU.Play();
+    }
+
+    public void PlaySoundC(int n)
+    {
+        // 효과음 선택
+        switch (n)
+        {
+            // 마법사
+            case 4:
+                SoundC.clip = S_CatMove;
+                break;
+            case 5:
+                SoundC.clip = S_CatMellow;
+                break;
+            // 마법사 스킬
+            case 8:
+                SoundC.clip = S_Boom;
+                break;
+            case 9:
+                SoundC.clip = S_Curse;
+                break;
+            case 22:
+                SoundC.clip = S_Attack;
+                break;
+        }
+        // 효과음 재생
+        SoundC.Play();
+    }
+
+    public void PlaySoundY(int n)
+    {
+        // 효과음 선택
+        switch (n)
+        {
+            // 카드 덱
+            case 1:
+                SoundY.clip = S_CardDraw;
+                break;
+            case 2:
+                SoundY.clip = S_CardLoop;
+                break;
+            case 3:
+                SoundY.clip = S_CardRemove;
+                break;
+        }
+        // 효과음 재생
+        SoundY.Play();
+    }
+
+    public void PlaySoundR(int n)
+    {
+        // 효과음 선택
+        switch (n)
+        {
+            case 10:
+                SoundR.clip = S_Timer;
+                break;
+        }
+        // 효과음 재생
+        SoundR.Play();
     }
 
     // Start is called before the first frame update
@@ -160,7 +223,7 @@ public class N_CardSystem : MonoBehaviour
         if (!isPause)
         {
             isPause = true;
-            PlaySoundA(24);
+            PlaySoundU(24);
             SP_bar.localScale = new Vector3(1, 0, 1);
             OptionScreen.SetActive(true);
             FakeBoard.SetActive(true);
@@ -174,7 +237,7 @@ public class N_CardSystem : MonoBehaviour
         {
             isPause = false;
             Time.timeScale = 1;     // 일시정지 해제
-            PlaySoundA(23);
+            PlaySoundU(23);
             SP_bar.localScale = new Vector3(1, 1, 1);
             OptionScreen.SetActive(false);
             FakeBoard.SetActive(false);
@@ -225,7 +288,7 @@ public class N_CardSystem : MonoBehaviour
                 wild();
                 break;
             case 4:
-                PlaySoundA(20);
+                PlaySoundU(20);
                 provoke();
                 break;
             case 5:
@@ -412,6 +475,7 @@ public class N_CardSystem : MonoBehaviour
                     // 시작 위치 변경
                     gridView.temp_x = next.column;
                     gridView.temp_y = next.row;
+                    PlaySoundC(4);
 
                     Cat.position = new Vector3(xSize - 7.4f, ySize + 2.3f, 5); // 수동으로 변경할 부분 좌표계
                     yield return new WaitForSeconds(0.000000001f);
@@ -488,7 +552,6 @@ public class N_CardSystem : MonoBehaviour
             HeroDual.SetActive(true);
         }
         Invoke("After_curse", 15f);
-
     }
 
     void After_curse()
@@ -535,7 +598,7 @@ public class N_CardSystem : MonoBehaviour
             {
                 RedObj.SetActive(true);
                 CDS.CardAttack();
-                PlaySoundA(22);
+                PlaySoundC(22);
             }
         }
         CardCover.SetActive(false);
@@ -634,7 +697,7 @@ public class N_CardSystem : MonoBehaviour
         // 캣닢이 설치된 곳에 캣닢 또는 허수아비가 있지 않다면 정상작동
         if (!isCatnip)
         {
-            PlaySoundA(21);
+            PlaySoundU(21);
             UIArray_N[0].SetActive(false);
             CardCover.SetActive(false);
             catnipIndex = (catnipIndex + 1) % maxCatnip;
@@ -740,11 +803,11 @@ public class N_CardSystem : MonoBehaviour
         // 허수아비가 설치된 곳에 캣닢 또는 허수아비가 있지 않다면 정상작동
         if (!isScrow)
         {
-            PlaySoundA(19);
+            PlaySoundU(19);
             UIArray_N[1].SetActive(false);
             CardCover.SetActive(false);
             scrowIndex = (scrowIndex + 1) % maxScrow;
-            yield return new WaitForSeconds(15f);
+            yield return new WaitForSeconds(25f);
             scrow[index].SetActive(false);
             N_Scrow.ScrowOn[index] = false;
             if (isScrowOn)
@@ -811,7 +874,7 @@ public class N_CardSystem : MonoBehaviour
     // 플레이어가 이겼을 때
     public void Win()
     {
-        PlaySoundA(12);
+        PlaySoundU(12);
         Game_clear.SetActive(true);
         int pathCount = gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex;
         bonus_gold = (pathCount - 1) * 40;
@@ -864,32 +927,47 @@ public class N_CardSystem : MonoBehaviour
         
         if (skill_hard <= RemainPath && SP_Slider.value>=80)
         {
+            PlaySoundC(5);
             //폭발 스킬 쓰기
             print("폭발스킬 써야함");
+            Invoke("PlayBoom", 1f);
         }
         else if (SP_Slider.value >= 30)
         {
             if (Random.Range(0, 2) == 0)
             {
-                print("공격");
                 Cat_attack();
+                print("공격");
             }
             else
             {
-                print("저주");
                 Cat_curse();
+                print("저주");
+                Invoke("PlayCurse", 0.8f);
             }
+            PlaySoundC(5);
         }
         // 허수아비 위에서는 휴식 스킬 사용 X
         else if(countRest && !isScrowOn)
         {
-            print("휴식");
             Cat_rest();
+            print("휴식");
+            PlaySoundC(5);
         }
 
         if (!countRest)
             countRest = true;
         
+    }
+
+    public void PlayBoom()
+    {
+        PlaySoundC(8);
+    }
+
+    public void PlayCurse()
+    {
+        PlaySoundC(9);
     }
 
 }

@@ -147,7 +147,7 @@ public class N_CardDeckSys : MonoBehaviour
                     CardObject[i].SetActive(true);
                     CardImage[i].sprite = CardSprite[index];
                     CardAnimator[i].SetTrigger("Draw");
-                    // + 카드 드로우 애니메이션
+                    CS.PlaySoundY(1);
                     if (CardN == 2)
                         DeckObject[2].SetActive(false);
                     else if (CardN == 1)
@@ -160,7 +160,6 @@ public class N_CardDeckSys : MonoBehaviour
                 else
                 {
                     CardShuffle();
-                    // + 카드 루프 애니메이션
                     yield return new WaitForSeconds(0.3f);
                     for (int k = 0; k < TotalCard; k++)
                     {
@@ -173,6 +172,11 @@ public class N_CardDeckSys : MonoBehaviour
                         CardIndex = 0;
                         if (k < 3)
                             yield return new WaitForSeconds(0.1f);
+                        else if (k == 3)
+                        {
+                            CS.PlaySoundY(2);
+                            yield return new WaitForSeconds(0.01f);
+                        }
                         else
                             yield return new WaitForSeconds(0.01f);
                     }
@@ -185,6 +189,7 @@ public class N_CardDeckSys : MonoBehaviour
             yield return new WaitForSeconds(TimeToSleep);
 
             // BlinkTime만큼 깜박인다.
+            CS.PlaySoundR(10);
             for (int i = 1; i <= BlinkTime; i++)
             {
                 for (int m = 0; m < 5; m++)
@@ -218,7 +223,7 @@ public class N_CardDeckSys : MonoBehaviour
     {
         HandOrder[index] = -1;
         RemoveMark(index);
-        // + 카드 버리는 애니메이션
+        CS.PlaySoundY(3);
         if (isAni)
         {
             CardAnimator[index].SetTrigger("Remove");
@@ -398,6 +403,7 @@ public class N_CardDeckSys : MonoBehaviour
     // 마우스 오른쪽 누르면
     public void PrintInfo(int cardType)
     {
+        CS.PlaySoundU(23);
         InfoWhiteObject.SetActive(true);
         InfoObject.SetActive(true);
         InfoImage.sprite = InfoSprite[cardType];

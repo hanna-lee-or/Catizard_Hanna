@@ -19,7 +19,7 @@ public class removeWall : MonoBehaviour
 
     public void remove(int i)
     {
-        card.PlaySoundA(18);
+        card.PlaySoundU(18);
 
         bIndex = p.blockIndex[i];
         type = p.wallType[i];

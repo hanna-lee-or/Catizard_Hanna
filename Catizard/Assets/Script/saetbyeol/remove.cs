@@ -7,6 +7,7 @@ public class remove : MonoBehaviour
     public putWall pw;
     public removeWall rw;
     public int index;
+    public GameObject wall;
 
     private SpriteRenderer thisSprite;
 
@@ -34,18 +35,19 @@ public class remove : MonoBehaviour
 
     void OnMouseDown()
     {
-        destroy();
+        StartCoroutine("destroy");
     }
 
-    void destroy()
+    IEnumerator destroy()
     {
         if (rw.canRemove)
         {
-            if (pw.wallList.Exists(x => x.gameObject)) //if (pw.wallList.Exists(x => x.wall == gameObject))
+            if (pw.wallList.Exists(x => x.gameObject))
             {
-                index = pw.wallList.FindIndex(x => x.gameObject);//                index = pw.wallList.FindIndex(x => x.wall == gameObject);
+                index = pw.wallList.FindIndex(x => x == wall.gameObject);
                 print("제거된 벽의 index : " + index);
                 rw.remove(index);
+                yield return new WaitForSeconds(0.1f);
                 Destroy(gameObject);
             }
         }
