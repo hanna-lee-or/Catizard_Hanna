@@ -38,7 +38,7 @@ public class N_CardSystem : MonoBehaviour
     public GameObject Game_clear, Game_Over;
 
     // Audio_UseCard
-    public AudioClip S_Click, S_Reflection, S_BlockOn, S_BlockOff, S_Scrow, S_Catnip, S_Provoke, S_Win;
+    public AudioClip S_Click, S_Reflection, S_BlockOn, S_BlockOff, S_Scrow, S_Provoke, S_Catnip, S_Wings, S_CountUp, S_Win, S_Lose;
     // Audio_Cat
     public AudioClip S_CatMove, S_CatMellow, S_Boom, S_Curse, S_Attack;
     // Audio_System
@@ -61,7 +61,16 @@ public class N_CardSystem : MonoBehaviour
         // 효과음 선택
         switch (n)
         {
-            // 카드 사용
+            // 카드 사용, win/lose
+            case 6:
+                SoundU.clip = S_Lose;
+                break;
+            case 7:
+                SoundU.clip = S_Wings;
+                break;
+            case 11:
+                SoundU.clip = S_CountUp;
+                break;
             case 12:
                 SoundU.clip = S_Win;
                 break;
@@ -314,7 +323,7 @@ public class N_CardSystem : MonoBehaviour
     {
         isSOS = true;
         SOS_repeat++;
-
+        PlaySoundU(7);
         if (SOS_repeat == 1)
         {
             HeroAnimator.SetBool("run", true);
@@ -364,7 +373,8 @@ public class N_CardSystem : MonoBehaviour
         if (Provoke_repeat == 1)
         {
             cat_wait = cat_wait - 1;
-            graphic_change(2);
+            if (!isCatnipOn)
+                graphic_change(2);
             SP_Slider.value = 0;
             StartCoroutine("After_provoke");
         }
@@ -444,7 +454,7 @@ public class N_CardSystem : MonoBehaviour
             }
 
             // 다음 순서의 길이 있다면 다음 노드로 이동
-            if (!provokeFlag)
+            if (!provokeFlag || !isCatnipOn)
             {
                 if (gridView.minIndex >= 0 && gridView.isPath && gridView.CatIndex < gridView.CatPath[gridView.minIndex].Count)
                 {
@@ -478,7 +488,7 @@ public class N_CardSystem : MonoBehaviour
                     PlaySoundC(4);
 
                     Cat.position = new Vector3(xSize - 7.4f, ySize + 2.3f, 5); // 수동으로 변경할 부분 좌표계
-                    yield return new WaitForSeconds(0.000000001f);
+                    yield return new WaitForSeconds(0.00001f);
                 }
 
                 // 마법사가 맨 오른쪽 칸에 도달한다면 게임종료
@@ -489,8 +499,8 @@ public class N_CardSystem : MonoBehaviour
                     Lose();
                 }
             }
-            else
-                provokeFlag = false;
+
+            provokeFlag = false;
         }
 
     }
@@ -510,18 +520,34 @@ public class N_CardSystem : MonoBehaviour
     {
         graphic_change(1);
         cat_wait = 12;
-        Invoke("Cat_SPplus", 12f);
+        StartCoroutine("Cat_SPplus");
     }
     
-    void Cat_SPplus()
+    IEnumerator Cat_SPplus()
     {
-        if (SP_Slider.value <= 70)
-        {
+        bool flag = false;
 
-            SP_Slider.value += 30;
+        // 도중에 도발 카드 사용되면 스킬 취소
+        for (int i = 0; i < 12; i++)
+        {
+            if (isProvoke)
+            {
+                flag = true;
+                break;
+            }
+            yield return new WaitForSeconds(1);
         }
-        else
-            SP_Slider.value = 100;
+        
+        if (!flag)
+        {
+            if (SP_Slider.value <= 70)
+            {
+
+                SP_Slider.value += 30;
+            }
+            else
+                SP_Slider.value = 100;
+        }
         cat_wait = 4;
         // 상태에 따라 이미지 변경
         if (isProvoke)
@@ -887,7 +913,8 @@ public class N_CardSystem : MonoBehaviour
         remain_time = 4 * pathCount;
         timeText_C.text = "" + remain_time;
         yield return new WaitForSeconds(1f);
-        while (bonus_gold >= total_gold)
+        PlaySoundU(11);
+        while (bonus_gold > total_gold)
         {
             if (bonus_gold - total_gold > 10)
             {
@@ -908,7 +935,7 @@ public class N_CardSystem : MonoBehaviour
     // 플레이어가 졌을 때
     public void Lose()
     {
-        print("Lose");
+        PlaySoundU(6);
         CDS.StopAllCoroutines();
         CardCover.SetActive(true);
         Game_Over.SetActive(true);
@@ -937,12 +964,10 @@ public class N_CardSystem : MonoBehaviour
             if (Random.Range(0, 2) == 0)
             {
                 Cat_attack();
-                print("공격");
             }
             else
             {
                 Cat_curse();
-                print("저주");
                 Invoke("PlayCurse", 0.8f);
             }
             PlaySoundC(5);
@@ -951,7 +976,6 @@ public class N_CardSystem : MonoBehaviour
         else if(countRest && !isScrowOn)
         {
             Cat_rest();
-            print("휴식");
             PlaySoundC(5);
         }
 

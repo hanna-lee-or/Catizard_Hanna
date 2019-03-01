@@ -21818,9 +21818,12 @@ MonoBehaviour:
   S_BlockOn: {fileID: 8300000, guid: 264bb12ca48a43d4dbbf294192b69997, type: 3}
   S_BlockOff: {fileID: 8300000, guid: db9dbaf545a356448b0741361728efd5, type: 3}
   S_Scrow: {fileID: 8300000, guid: 736da7b4bf2d55d4fbb7d5f60f4964a0, type: 3}
-  S_Catnip: {fileID: 8300000, guid: 6bb493714e8dbb7409d663e9ea1b572c, type: 3}
   S_Provoke: {fileID: 8300000, guid: b727ab4600309bd4ea234a66d60b7322, type: 3}
+  S_Catnip: {fileID: 8300000, guid: 6bb493714e8dbb7409d663e9ea1b572c, type: 3}
+  S_Wings: {fileID: 8300000, guid: 27bc75a3a6690d343873e309fa3d4076, type: 3}
+  S_CountUp: {fileID: 8300000, guid: dfd0a4ca8415a3445b48bb8dbdcb5139, type: 3}
   S_Win: {fileID: 8300000, guid: 00b8c330afc49e54bb3af17316dab609, type: 3}
+  S_Lose: {fileID: 8300000, guid: af6c9aef42da8f047af1d733603f93b1, type: 3}
   S_CatMove: {fileID: 8300000, guid: 4eef6e41ee99698448d2233a93db6c24, type: 3}
   S_CatMellow: {fileID: 8300000, guid: 446f980ac84b820418ab9144b42209a0, type: 3}
   S_Boom: {fileID: 8300000, guid: 4e898ec1061134b4cbaaca85c04e25a6, type: 3}
