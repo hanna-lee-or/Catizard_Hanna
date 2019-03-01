@@ -236,16 +236,16 @@ public class BlockScript : MonoBehaviour
 	{
 		if (nodeReference == null ) return;                                // If a Node Reference wasn't given, then don't do anything
         
-        // 테스트용
+        /* 테스트용
         if (N_CardDeckSys.isTest && (BlockType == 1 || BlockType == 2))
         {
             nodeReference.isObstacle = !nodeReference.isObstacle;    // flip obstacles
             setupDisplay();
             gridView.Reset();
             gridView.JPS();
-        }
+        }*/
         // 캣닢
-        else if (BlockType == 3 && card.isCatnip)
+        if (BlockType == 3 && card.isCatnip)
         {
             if (nodeReference.isObstacle)
             {

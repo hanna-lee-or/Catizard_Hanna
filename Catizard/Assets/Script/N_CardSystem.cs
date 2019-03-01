@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class N_CardSystem : MonoBehaviour
 {
 
-    public bool isGame = true, isPause = false, isCurse = false, isProvoke = false;
+    public bool isGame = true, isPause = false, isCurse = false, isProvoke = false, isCatSkill = false;
     public bool isSOS = false, isWild = false, isCatnip = false, isCatnipOn = false, isScrow = false, isScrowOn = false;
     public int GameMinute = 5, HeroSpeed = 1, cat_wait = 4, Cat_num_prev = 0, Cat_num_curr = 0, provoke_time = 18;
     public int total_gold = 300, bonus_gold = 0, remain_time = 0, RemainPath = 0, skill_hard = 5, skill_normal = 10;
@@ -205,6 +205,7 @@ public class N_CardSystem : MonoBehaviour
                 gridView.isGame = false;
                 yield return new WaitForSeconds(1f);
                 gridView.JPS();
+                PlaySoundU(24);
                 yield return new WaitForSeconds(1f);
                 Win();
             }
@@ -294,11 +295,11 @@ public class N_CardSystem : MonoBehaviour
                 UIArray_N[2].SetActive(true);
                 break;
             case 3:
-                wild();
+                Wild();
                 break;
             case 4:
                 PlaySoundU(20);
-                provoke();
+                Provoke();
                 break;
             case 5:
                 On_Scrow();
@@ -328,7 +329,12 @@ public class N_CardSystem : MonoBehaviour
         {
             HeroAnimator.SetBool("run", true);
             HeroSpeed = 2;
-            HeroSOS.SetActive(true);
+            if (!isCurse)
+            {
+                HeroSOS.SetActive(true);
+            }
+            else
+                HeroDual.SetActive(true);
             StartCoroutine("Off_SOS");
         }
         
@@ -336,21 +342,24 @@ public class N_CardSystem : MonoBehaviour
 
     IEnumerator Off_SOS()
     {
-
         while (SOS_repeat > 0)
         {
             yield return new WaitForSeconds(10f);
             SOS_repeat--;
         }
         isSOS = false;
+        HeroSOS.SetActive(false);
         HeroDual.SetActive(false);
         HeroAnimator.SetBool("run", false);
+        if (HeroSpeed < 0)
+        {
+            Hero.localScale = new Vector3(-1, 1, 1);
+        }
         HeroSpeed = 1;
-        HeroSOS.SetActive(false);
     }
 
     // 와일드 카드
-    public void wild()
+    public void Wild()
     {
         isWild = true;
         UIArray_N[4].SetActive(true);
@@ -366,7 +375,7 @@ public class N_CardSystem : MonoBehaviour
     }
 
     // 도발 카드 (시간 누적O)
-    public void provoke()
+    public void Provoke()
     {
         isProvoke = true;
         Provoke_repeat++;
@@ -390,8 +399,40 @@ public class N_CardSystem : MonoBehaviour
         }
         cat_wait = cat_wait + 1;
         SP_Slider.value = 0;
-        graphic_change(0);
+        graphic_change();
         isProvoke = false;
+    }
+
+    // 마법사 sprite 변경
+    public void graphic_change()
+    {
+        int Graphic_num;
+        if (isCatSkill)
+        {
+            Graphic_num = 1;
+        }
+        else if (isProvoke)
+        {
+            Graphic_num = 2;
+        }
+        else if (isScrowOn)
+        {
+            Graphic_num = 3;
+        }
+        else if (isCatnipOn)
+        {
+            Graphic_num = 4;
+        }
+        else
+        {
+            Graphic_num = 0;
+        }
+        // 상태에 따른 이미지 변경
+        for (int i = 0; i < Cat_graphic.Length; i++)
+        {
+            Cat_graphic[i].SetActive(false);
+        }
+        Cat_graphic[Graphic_num].SetActive(true);
     }
 
     // JPS
@@ -420,14 +461,7 @@ public class N_CardSystem : MonoBehaviour
                 yield return new WaitForSeconds(4 + stopTime);
                 isCatnipOn = false;
                 // 상태에 따라 이미지 변경
-                if (isProvoke)
-                    graphic_change(2);
-                else if (isScrowOn)
-                    graphic_change(3);
-                else if (isCatnipOn)
-                    graphic_change(4);
-                else
-                    graphic_change(0);
+                graphic_change();
             }
             // 허수아비에 닿았다면
             else if (isScrowOn)
@@ -550,14 +584,8 @@ public class N_CardSystem : MonoBehaviour
         }
         cat_wait = 4;
         // 상태에 따라 이미지 변경
-        if (isProvoke)
-            graphic_change(2);
-        else if (isScrowOn)
-            graphic_change(3);
-        else if (isCatnipOn)
-            graphic_change(4);
-        else
-            graphic_change(0);
+        isCatSkill = false;
+        graphic_change();
     }
 
     // 저주 스킬
@@ -569,13 +597,18 @@ public class N_CardSystem : MonoBehaviour
         On_ErrorUI(4);
         graphic_change(1);
         isCurse = true;
-        Hero.localScale = new Vector3(-1, 1, 1);
-        HeroCurse.SetActive(true);
         SP_Slider.value -= 30;
-        if (isSOS)
+        HeroCurse.SetActive(true);
+        if (!isSOS)
+        {
+            Hero.localScale = new Vector3(-1, 1, 1);
+        }
+        else
         {
             HeroSOS.SetActive(false);
             HeroDual.SetActive(true);
+            HeroSpeed = -1;
+            Hero.localScale = new Vector3(1, 1, 1);
         }
         Invoke("After_curse", 15f);
     }
@@ -585,18 +618,16 @@ public class N_CardSystem : MonoBehaviour
         isCurse = false;
         HeroCurse.SetActive(false);
         HeroDual.SetActive(false);
+        HeroSpeed = 1;
         if (isSOS)
+        {
+            HeroSpeed = 2;
             HeroSOS.SetActive(true);
+        }
         Hero.localScale = new Vector3(1, 1, 1);
         // 상태에 따라 이미지 변경
-        if (isProvoke)
-            graphic_change(2);
-        else if (isScrowOn)
-            graphic_change(3);
-        else if (isCatnipOn)
-            graphic_change(4);
-        else
-            graphic_change(0);
+        isCatSkill = false;
+        graphic_change();
     }
 
     // 공격 스킬
@@ -638,14 +669,8 @@ public class N_CardSystem : MonoBehaviour
         }
         ClawObj.SetActive(false);
         // 상태에 따라 이미지 변경
-        if (isProvoke)
-            graphic_change(2);
-        else if (isScrowOn)
-            graphic_change(3);
-        else if (isCatnipOn)
-            graphic_change(4);
-        else
-            graphic_change(0);
+        isCatSkill = false;
+        graphic_change();
     }
 
     // UI관련 함수
@@ -668,6 +693,10 @@ public class N_CardSystem : MonoBehaviour
     public void On_ErrorUI(int num)
     {
         StopCoroutine("On_UI");
+        for (int i = 0; i < UIArray_E.Length; i++)
+        {
+            UIArray_E[i].SetActive(false);
+        }
         StartCoroutine("On_UI", num);
     }
 
@@ -840,14 +869,7 @@ public class N_CardSystem : MonoBehaviour
             {
                 isScrowOn = false;
                 // 상태에 따라 이미지 변경
-                if (isProvoke)
-                    graphic_change(2);
-                else if (isScrowOn)
-                    graphic_change(3);
-                else if (isCatnipOn)
-                    graphic_change(4);
-                else
-                    graphic_change(0);
+                graphic_change();
             }
         }
         // 아니라면 허수아비설치 취소 및 에러창 생성
@@ -912,7 +934,7 @@ public class N_CardSystem : MonoBehaviour
         //Clear_window.SetActive(true);
         remain_time = 4 * pathCount;
         timeText_C.text = "" + remain_time;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         PlaySoundU(11);
         while (bonus_gold > total_gold)
         {
@@ -950,6 +972,7 @@ public class N_CardSystem : MonoBehaviour
         if (isWild || isCatnipOn)
             return;
 
+        isCatSkill = true;
         RemainPath = gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex;
         
         if (skill_hard <= RemainPath && SP_Slider.value>=80)

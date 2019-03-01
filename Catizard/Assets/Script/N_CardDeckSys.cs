@@ -110,9 +110,16 @@ public class N_CardDeckSys : MonoBehaviour
                 CS.UIArray_N[3].SetActive(false);
                 CS.CardCover.SetActive(false);
             }
+            // 에러창 끄기
+            for (int i = 0; i < CS.UIArray_E.Length; i++)
+            {
+                CS.UIArray_E[i].SetActive(false);
+            }
+            // Info창 끄기
             RemoveInfo();
             N_CardEvent.isPress = false;
             total = 0;
+            // 애니메이션
             for (int i = 0; i < 5; i++)
             {
                 Removed_Animator[i].SetTrigger("end");

@@ -52,14 +52,7 @@ public class N_Scrow : MonoBehaviour
             }
 
             // 상태에 따라 이미지 변경
-            if (NCS.isProvoke)
-                NCS.graphic_change(2);
-            else if (NCS.isScrowOn)
-                NCS.graphic_change(3);
-            else if (NCS.isCatnipOn)
-                NCS.graphic_change(4);
-            else
-                NCS.graphic_change(0);
+            NCS.graphic_change();
         }
     }
 
