@@ -268,6 +268,7 @@ public class putWall : MonoBehaviour
             {
                 canPut = true;
                 put(column, row);
+                card.PlaySoundA(17);
             }
         }
     }

@@ -19,6 +19,8 @@ public class removeWall : MonoBehaviour
 
     public void remove(int i)
     {
+        card.PlaySoundA(18);
+
         bIndex = p.blockIndex[i];
         type = p.wallType[i];
         rotation = p.wallRotation[i];

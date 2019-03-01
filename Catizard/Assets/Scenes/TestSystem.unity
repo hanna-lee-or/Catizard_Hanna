@@ -163,6 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NCS: {fileID: 915446942}
+  num: 0
 --- !u!50 &15979978
 Rigidbody2D:
   serializedVersion: 4
@@ -2134,6 +2135,7 @@ GameObject:
   - component: {fileID: 253976986}
   - component: {fileID: 253976988}
   - component: {fileID: 253976987}
+  - component: {fileID: 253976989}
   m_Layer: 0
   m_Name: Scrow8_Position
   m_TagString: scrow
@@ -2212,6 +2214,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.2}
   m_EdgeRadius: 0
+--- !u!114 &253976989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 253976985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd9b0cb46067ad4d82728f95122af45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  num: 7
 --- !u!1 &258763088
 GameObject:
   m_ObjectHideFlags: 0
@@ -2381,6 +2396,7 @@ GameObject:
   - component: {fileID: 275167082}
   - component: {fileID: 275167084}
   - component: {fileID: 275167083}
+  - component: {fileID: 275167085}
   m_Layer: 0
   m_Name: Scrow2_Position
   m_TagString: scrow
@@ -2459,6 +2475,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.2}
   m_EdgeRadius: 0
+--- !u!114 &275167085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275167081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd9b0cb46067ad4d82728f95122af45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  num: 1
 --- !u!1 &277636764
 GameObject:
   m_ObjectHideFlags: 0
@@ -7200,6 +7229,7 @@ GameObject:
   - component: {fileID: 688635886}
   - component: {fileID: 688635888}
   - component: {fileID: 688635887}
+  - component: {fileID: 688635889}
   m_Layer: 0
   m_Name: Scrow11_Position
   m_TagString: scrow
@@ -7278,6 +7308,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.2}
   m_EdgeRadius: 0
+--- !u!114 &688635889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688635885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd9b0cb46067ad4d82728f95122af45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  num: 10
 --- !u!1 &692159894
 GameObject:
   m_ObjectHideFlags: 0
@@ -7605,6 +7648,7 @@ GameObject:
   - component: {fileID: 735553058}
   - component: {fileID: 735553060}
   - component: {fileID: 735553059}
+  - component: {fileID: 735553061}
   m_Layer: 0
   m_Name: Scrow4_Position
   m_TagString: scrow
@@ -7683,6 +7727,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.2}
   m_EdgeRadius: 0
+--- !u!114 &735553061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 735553057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd9b0cb46067ad4d82728f95122af45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  num: 3
 --- !u!1 &740815150
 GameObject:
   m_ObjectHideFlags: 0
@@ -8459,6 +8516,133 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 817784052}
   m_CullTransparentMesh: 0
+--- !u!1 &837477014
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 837477016}
+  - component: {fileID: 837477015}
+  m_Layer: 0
+  m_Name: Audio_UseCard
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &837477015
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837477014}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &837477016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837477014}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.006970197, y: -0.06599267, z: -81.80469}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &837693460
 GameObject:
   m_ObjectHideFlags: 0
@@ -9381,6 +9565,16 @@ MonoBehaviour:
   timeText_O: {fileID: 1732957494}
   Game_clear: {fileID: 479670185}
   Game_Over: {fileID: 277636764}
+  S_Click: {fileID: 8300000, guid: cf7ff75ed9a0a1c418a69b71ece6d916, type: 3}
+  S_Reflection: {fileID: 8300000, guid: 5a73fec96ddbd9c4aa6334c64afc90fa, type: 3}
+  S_BlockOn: {fileID: 8300000, guid: 264bb12ca48a43d4dbbf294192b69997, type: 3}
+  S_BlockOff: {fileID: 8300000, guid: db9dbaf545a356448b0741361728efd5, type: 3}
+  S_Scrow: {fileID: 8300000, guid: 736da7b4bf2d55d4fbb7d5f60f4964a0, type: 3}
+  S_Catnip: {fileID: 8300000, guid: 6bb493714e8dbb7409d663e9ea1b572c, type: 3}
+  S_Provoke: {fileID: 8300000, guid: b727ab4600309bd4ea234a66d60b7322, type: 3}
+  S_Attack: {fileID: 8300000, guid: b8a11e5b19cf23c41bb272bbaed43df9, type: 3}
+  S_Win: {fileID: 8300000, guid: 00b8c330afc49e54bb3af17316dab609, type: 3}
+  SoundA: {fileID: 837477015}
   rw: {fileID: 430623041}
   wallCard: 0
 --- !u!4 &915446943
@@ -12383,6 +12577,7 @@ GameObject:
   - component: {fileID: 1121862391}
   - component: {fileID: 1121862393}
   - component: {fileID: 1121862392}
+  - component: {fileID: 1121862394}
   m_Layer: 0
   m_Name: Scrow3_Position
   m_TagString: scrow
@@ -12461,6 +12656,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.2}
   m_EdgeRadius: 0
+--- !u!114 &1121862394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121862390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd9b0cb46067ad4d82728f95122af45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  num: 2
 --- !u!1 &1132373268
 GameObject:
   m_ObjectHideFlags: 0
@@ -15091,6 +15299,7 @@ GameObject:
   - component: {fileID: 1385521888}
   - component: {fileID: 1385521890}
   - component: {fileID: 1385521889}
+  - component: {fileID: 1385521891}
   m_Layer: 0
   m_Name: Scrow10_Position
   m_TagString: scrow
@@ -15169,6 +15378,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.2}
   m_EdgeRadius: 0
+--- !u!114 &1385521891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385521887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd9b0cb46067ad4d82728f95122af45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  num: 9
 --- !u!1 &1387160316
 GameObject:
   m_ObjectHideFlags: 0
@@ -15275,6 +15497,7 @@ GameObject:
   - component: {fileID: 1395014236}
   - component: {fileID: 1395014238}
   - component: {fileID: 1395014237}
+  - component: {fileID: 1395014239}
   m_Layer: 0
   m_Name: Scrow6_Position
   m_TagString: scrow
@@ -15353,6 +15576,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.2}
   m_EdgeRadius: 0
+--- !u!114 &1395014239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395014235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd9b0cb46067ad4d82728f95122af45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  num: 5
 --- !u!1 &1399372061
 GameObject:
   m_ObjectHideFlags: 0
@@ -18518,6 +18754,7 @@ GameObject:
   - component: {fileID: 1666377895}
   - component: {fileID: 1666377897}
   - component: {fileID: 1666377896}
+  - component: {fileID: 1666377898}
   m_Layer: 0
   m_Name: Scrow5_Position
   m_TagString: scrow
@@ -18596,6 +18833,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.2}
   m_EdgeRadius: 0
+--- !u!114 &1666377898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666377894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd9b0cb46067ad4d82728f95122af45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  num: 4
 --- !u!1 &1667601339
 GameObject:
   m_ObjectHideFlags: 0
@@ -21097,6 +21347,7 @@ GameObject:
   - component: {fileID: 1914301092}
   - component: {fileID: 1914301094}
   - component: {fileID: 1914301093}
+  - component: {fileID: 1914301095}
   m_Layer: 0
   m_Name: Scrow9_Position
   m_TagString: scrow
@@ -21175,6 +21426,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.2}
   m_EdgeRadius: 0
+--- !u!114 &1914301095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1914301091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd9b0cb46067ad4d82728f95122af45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  num: 8
 --- !u!1 &1918210348
 GameObject:
   m_ObjectHideFlags: 0
@@ -23121,6 +23385,7 @@ GameObject:
   - component: {fileID: 2051607561}
   - component: {fileID: 2051607563}
   - component: {fileID: 2051607562}
+  - component: {fileID: 2051607564}
   m_Layer: 0
   m_Name: Scrow7_Position
   m_TagString: scrow
@@ -23199,6 +23464,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.2}
   m_EdgeRadius: 0
+--- !u!114 &2051607564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051607560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd9b0cb46067ad4d82728f95122af45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  num: 6
 --- !u!1 &2052093885
 GameObject:
   m_ObjectHideFlags: 0
@@ -23457,6 +23735,7 @@ GameObject:
   - component: {fileID: 2057470743}
   - component: {fileID: 2057470745}
   - component: {fileID: 2057470744}
+  - component: {fileID: 2057470746}
   m_Layer: 0
   m_Name: Scrow1_Position
   m_TagString: scrow
@@ -23535,6 +23814,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.2}
   m_EdgeRadius: 0
+--- !u!114 &2057470746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057470742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd9b0cb46067ad4d82728f95122af45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  num: 0
 --- !u!1 &2064131594
 GameObject:
   m_ObjectHideFlags: 0
