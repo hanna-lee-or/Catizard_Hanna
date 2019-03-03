@@ -10,7 +10,7 @@ public class N_CardSystem : MonoBehaviour
     public bool isGame = true, isPause = false, isCurse = false, isProvoke = false, isCatSkill = false;
     public bool isSOS = false, isWild = false, isCatnip = false, isCatnipOn = false, isScrow = false, isScrowOn = false;
     public int GameMinute = 5, HeroSpeed = 1, cat_wait = 4, Cat_num_prev = 0, Cat_num_curr = 0, provoke_time = 18;
-    public int total_gold = 300, bonus_gold = 0, remain_time = 0, RemainPath = 0, skill_hard = 5, skill_normal = 10;
+    public int chap_gold = 0, total_gold = 0, bonus_gold = 0, remain_time = 0, RemainPath = 0, skill_hard = 5, skill_normal = 10;
     public Slider HeroSlider;
     public Animator HeroAnimator;
     public GameObject HeroSOS, HeroCurse, HeroDual;
@@ -68,9 +68,6 @@ public class N_CardSystem : MonoBehaviour
             case 7:
                 SoundU.clip = S_Wings;
                 break;
-            case 11:
-                SoundU.clip = S_CountUp;
-                break;
             case 12:
                 SoundU.clip = S_Win;
                 break;
@@ -93,9 +90,6 @@ public class N_CardSystem : MonoBehaviour
             case 23:
                 SoundU.clip = S_Click;
                 break;
-            case 24:
-                SoundU.clip = S_Reflection;
-                break;
         }
         // 효과음 재생
         SoundU.Play();
@@ -109,9 +103,6 @@ public class N_CardSystem : MonoBehaviour
             // 마법사
             case 4:
                 SoundC.clip = S_CatMove;
-                break;
-            case 5:
-                SoundC.clip = S_CatMellow;
                 break;
             // 마법사 스킬
             case 8:
@@ -153,8 +144,17 @@ public class N_CardSystem : MonoBehaviour
         // 효과음 선택
         switch (n)
         {
+            case 5:
+                SoundR.clip = S_CatMellow;
+                break;
             case 10:
                 SoundR.clip = S_Timer;
+                break;
+            case 11:
+                SoundR.clip = S_CountUp;
+                break;
+            case 24:
+                SoundR.clip = S_Reflection;
                 break;
         }
         // 효과음 재생
@@ -195,6 +195,7 @@ public class N_CardSystem : MonoBehaviour
         }
     }
 
+    // 용사 이동
     IEnumerator HeroTimer()
     {
         while (isGame)
@@ -203,10 +204,8 @@ public class N_CardSystem : MonoBehaviour
             {
                 isGame = false;
                 gridView.isGame = false;
-                yield return new WaitForSeconds(1f);
+                PlaySoundR(24);
                 gridView.JPS();
-                PlaySoundU(24);
-                yield return new WaitForSeconds(1f);
                 Win();
             }
             if (HeroSlider.value < HeroSlider.maxValue && isCurse)
@@ -233,7 +232,7 @@ public class N_CardSystem : MonoBehaviour
         if (!isPause)
         {
             isPause = true;
-            PlaySoundU(24);
+            PlaySoundR(24);
             SP_bar.localScale = new Vector3(1, 0, 1);
             OptionScreen.SetActive(true);
             FakeBoard.SetActive(true);
@@ -486,10 +485,10 @@ public class N_CardSystem : MonoBehaviour
                     yield return new WaitForSeconds(1f);
                 }
             }
-
-            // 다음 순서의 길이 있다면 다음 노드로 이동
-            if (!provokeFlag || !isCatnipOn)
+            
+            if ((!provokeFlag || !isCatnipOn) && isGame)
             {
+                // 다음 순서의 길이 있다면 다음 노드로 이동
                 if (gridView.minIndex >= 0 && gridView.isPath && gridView.CatIndex < gridView.CatPath[gridView.minIndex].Count)
                 {
                     gridView.CatIndex++;
@@ -923,19 +922,51 @@ public class N_CardSystem : MonoBehaviour
     public void Win()
     {
         PlaySoundU(12);
+        StartCoroutine("Clear");
+    }
+
+    IEnumerator Clear()
+    {
+        yield return new WaitForSeconds(2f);
+        //Clear_window.SetActive(true);
         Game_clear.SetActive(true);
         int pathCount = gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex;
         bonus_gold = (pathCount - 1) * 40;
-        StartCoroutine("Clear", pathCount);
-    }
-
-    IEnumerator Clear(int pathCount)
-    {
-        //Clear_window.SetActive(true);
+        // 챕터별 보상 +
+        if (N_CardDeckSys.isTest)
+        {
+            if (N_PlayerInfo.Chap1_clear)
+            {
+                chap_gold = 300;
+            }
+            else
+            {
+                chap_gold = 1000;
+                N_PlayerInfo.Chap1_clear = true;
+            }
+        }
+        else
+        {
+            if (N_PlayerInfo.Chap2_clear)
+            {
+                chap_gold = 500;
+            }
+            else
+            {
+                chap_gold = 2000;
+                N_PlayerInfo.Chap2_clear = true;
+            }
+        }
+        bonus_gold += chap_gold;
+        N_PlayerInfo.Gold += bonus_gold;
+        // 시간 계산
         remain_time = 4 * pathCount;
         timeText_C.text = "" + remain_time;
-        yield return new WaitForSeconds(2f);
-        PlaySoundU(11);
+        // 골드 계산
+        goldText.text = "" + chap_gold;
+        total_gold = chap_gold;
+        yield return new WaitForSeconds(1f);
+        PlaySoundR(11);
         while (bonus_gold > total_gold)
         {
             if (bonus_gold - total_gold > 10)
@@ -951,7 +982,6 @@ public class N_CardSystem : MonoBehaviour
                 yield return new WaitForSeconds(0.01f);
             }
         }
-        N_PlayerInfo.Gold += total_gold;
     }
 
     // 플레이어가 졌을 때
@@ -986,14 +1016,14 @@ public class N_CardSystem : MonoBehaviour
         {
             if (Random.Range(0, 2) == 0)
             {
-                Cat_attack();
+                Cat_curse();
+                Invoke("PlayCurse", 1f);
             }
             else
             {
-                Cat_curse();
-                Invoke("PlayCurse", 0.8f);
+                Cat_attack();
             }
-            PlaySoundC(5);
+            PlaySoundR(5);
         }
         // 허수아비 위에서는 휴식 스킬 사용 X
         else if(countRest && !isScrowOn)

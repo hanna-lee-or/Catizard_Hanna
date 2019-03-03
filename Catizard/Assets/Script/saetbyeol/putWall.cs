@@ -42,7 +42,7 @@ public class putWall : MonoBehaviour
     public void checkAble(int column, int row, int cardtype)
     {
         bIndex = row * 37 + column;
-        this.cardType = cardtype;
+        cardType = cardtype;
         bool able = true;
         for(int k = 0; k < gridview.rand_x.Length; k++)
         {
@@ -63,8 +63,11 @@ public class putWall : MonoBehaviour
 
     public void checkPosition(int column, int row)
     {
+        // 변수 초기화
+        checkPos = false;
+
         // 벽이 겹치면 안됨
-        if(cardType == 0)
+        if (cardType == 0)
         {
             if (n.shape == 0 || n.shape == 2) //  l 모양
             {
@@ -122,8 +125,14 @@ public class putWall : MonoBehaviour
             }
         }
 
+        if (!checkPos)
+        {
+            card.On_ErrorUI(0);
+            return;
+        }
+
         // 겹치지 않는다면 장애물 처리해봄
-        if (checkPos == true)
+        if (checkPos)
         {
             switch (cardType)
             {

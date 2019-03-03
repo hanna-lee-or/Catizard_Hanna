@@ -262,7 +262,10 @@ public class N_CardDeckSys : MonoBehaviour
     {
         // 에너지 부족할 시
         if (Energy < e)
+        {
+            CS.On_ErrorUI(5);
             return false;
+        }
 
         if (!CS.isWild)
         {
@@ -306,18 +309,32 @@ public class N_CardDeckSys : MonoBehaviour
         // wild 카드에 한해 수중의 카드 체크
         if (CardType == 3)
         {
-            bool flag = false;
+            bool flag_isOtherCard = false;
+            bool flag_onlyBlockRemove = true;
             for (int i = 0; i < 5; i++)
             {
                 int Typei = HandOrder[i];
                 if (Typei != -1 && Typei != 3)
-                    flag = true;
+                {
+                    if (Typei != 8)
+                        flag_onlyBlockRemove = false;
+                    flag_isOtherCard = true;
+                }
             }
             // 복사할 카드가 없으면 에러창 띄우고 함수 취소
-            if (!flag)
+            if (!flag_isOtherCard)
             {
                 CS.On_ErrorUI(3);
                 return;
+            }
+            else
+            {
+                // 복사할 카드가 벽제거밖에 없는데 설치된 벽이 없는 경우 함수 취소
+                if (flag_onlyBlockRemove && pw.wallList.Count <= 0)
+                {
+                    CS.On_ErrorUI(1);
+                    return;
+                }
             }
         }
 

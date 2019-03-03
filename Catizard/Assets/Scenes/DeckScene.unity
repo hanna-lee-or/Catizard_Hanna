@@ -1547,6 +1547,7 @@ MonoBehaviour:
   - {fileID: 1268081180}
   Cardnum: 0
   CardPrice: 900100005e0100002c010000fa000000c80000009600000064000000
+  thisClip: {fileID: 0}
   sound: {fileID: 0}
 --- !u!1 &597000530
 GameObject:
@@ -4751,8 +4752,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 7.44, y: -2.75}
-  m_SizeDelta: {x: 82, y: 55}
+  m_AnchoredPosition: {x: 7.6, y: -2.75}
+  m_SizeDelta: {x: 109.293, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1725772410
 GameObject:

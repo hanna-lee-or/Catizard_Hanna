@@ -64,8 +64,8 @@ public class N_CardEvent : MonoBehaviour
                 energy = 15;
                 break;
             case 7:
-                energyText.text = "" + 25;
-                energy = 25;
+                energyText.text = "" + 20;
+                energy = 20;
                 break;
         }
     }
