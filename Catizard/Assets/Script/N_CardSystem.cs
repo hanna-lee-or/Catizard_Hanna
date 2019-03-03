@@ -9,6 +9,7 @@ public class N_CardSystem : MonoBehaviour
 
     public bool isGame = true, isPause = false, isCurse = false, isProvoke = false, isCatSkill = false;
     public bool isSOS = false, isWild = false, isCatnip = false, isCatnipOn = false, isScrow = false, isScrowOn = false;
+    public static bool isBoom = false;
     public int GameMinute = 5, HeroSpeed = 1, cat_wait = 4, Cat_num_prev = 0, Cat_num_curr = 0, provoke_time = 18;
     public int chap_gold = 0, total_gold = 0, bonus_gold = 0, remain_time = 0, RemainPath = 0, skill_hard = 5, skill_normal = 10;
     public Slider HeroSlider;
@@ -50,7 +51,7 @@ public class N_CardSystem : MonoBehaviour
     public removeWall rw;
     public int wallCard;
 
-    private int catnipIndex = 0, scrowIndex = 0, maxCatnip, maxScrow, SOS_repeat = 0, Provoke_repeat = 0;
+    private int waitOrigin, catnipIndex = 0, scrowIndex = 0, maxCatnip, maxScrow, SOS_repeat = 0, Provoke_repeat = 0;
     private bool countRest = false;
     private float blockSize, blockBuffer;
     private Point next = new Point(6, 0);
@@ -165,6 +166,7 @@ public class N_CardSystem : MonoBehaviour
     void Awake()
     {
         wallCard = -1;
+        waitOrigin = cat_wait;
         blockSize = gridView.blockSize;
         blockBuffer = gridView.blockBuffer;
         HeroSlider.maxValue = GameMinute * 120;
@@ -380,7 +382,7 @@ public class N_CardSystem : MonoBehaviour
         Provoke_repeat++;
         if (Provoke_repeat == 1)
         {
-            cat_wait = cat_wait - 1;
+            cat_wait = waitOrigin - 1;
             if (!isCatnipOn)
                 graphic_change(2);
             SP_Slider.value = 0;
@@ -396,42 +398,10 @@ public class N_CardSystem : MonoBehaviour
             yield return new WaitForSeconds(18f);
             Provoke_repeat--;
         }
-        cat_wait = cat_wait + 1;
+        cat_wait = waitOrigin + 1;
         SP_Slider.value = 0;
         graphic_change();
         isProvoke = false;
-    }
-
-    // 마법사 sprite 변경
-    public void graphic_change()
-    {
-        int Graphic_num;
-        if (isCatSkill)
-        {
-            Graphic_num = 1;
-        }
-        else if (isProvoke)
-        {
-            Graphic_num = 2;
-        }
-        else if (isScrowOn)
-        {
-            Graphic_num = 3;
-        }
-        else if (isCatnipOn)
-        {
-            Graphic_num = 4;
-        }
-        else
-        {
-            Graphic_num = 0;
-        }
-        // 상태에 따른 이미지 변경
-        for (int i = 0; i < Cat_graphic.Length; i++)
-        {
-            Cat_graphic[i].SetActive(false);
-        }
-        Cat_graphic[Graphic_num].SetActive(true);
     }
 
     // JPS
@@ -548,6 +518,38 @@ public class N_CardSystem : MonoBehaviour
         Cat_graphic[curr].SetActive(true);
     }
 
+    // 마법사 sprite 변경
+    public void graphic_change()
+    {
+        int Graphic_num;
+        if (isProvoke)
+        {
+            Graphic_num = 2;
+        }
+        else if (isScrowOn)
+        {
+            Graphic_num = 3;
+        }
+        else if (isCatnipOn)
+        {
+            Graphic_num = 4;
+        }
+        else if (isCatSkill)
+        {
+            Graphic_num = 1;
+        }
+        else
+        {
+            Graphic_num = 0;
+        }
+        // 상태에 따른 이미지 변경
+        for (int i = 0; i < Cat_graphic.Length; i++)
+        {
+            Cat_graphic[i].SetActive(false);
+        }
+        Cat_graphic[Graphic_num].SetActive(true);
+    }
+
     // 휴식 스킬
     public void Cat_rest()
     {
@@ -581,7 +583,7 @@ public class N_CardSystem : MonoBehaviour
             else
                 SP_Slider.value = 100;
         }
-        cat_wait = 4;
+        cat_wait = waitOrigin;
         // 상태에 따라 이미지 변경
         isCatSkill = false;
         graphic_change();
@@ -1009,7 +1011,7 @@ public class N_CardSystem : MonoBehaviour
         {
             PlaySoundC(5);
             //폭발 스킬 쓰기
-            print("폭발스킬 써야함");
+            Cat_Boom();
             Invoke("PlayBoom", 1f);
         }
         else if (SP_Slider.value >= 30)
@@ -1045,6 +1047,27 @@ public class N_CardSystem : MonoBehaviour
     public void PlayCurse()
     {
         PlaySoundC(9);
+    }
+
+    public void Cat_Boom()
+    {
+        print("폭발");
+        isBoom = true;
+        for (int i = 0; i < N_Scrow.ScrowOn.Length; i++)
+        {
+            N_Scrow.ScrowOn[i] = false;
+        }
+        isScrowOn = false;
+        // 상태에 따라 이미지 변경
+        graphic_change();
+        StartCoroutine("Boom");
+    }
+
+    IEnumerator Boom()
+    {
+        yield return new WaitForSeconds(2);
+        isBoom = false;
+        isCatSkill = false;
     }
 
 }

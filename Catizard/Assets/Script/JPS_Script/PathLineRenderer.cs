@@ -60,7 +60,7 @@ public class PathLineRenderer : MonoBehaviour
 		// Kill all my children
 		foreach ( GameObject child in _lines )
 		{
-			DestroyImmediate( child );
+			Destroy( child );
 		}
 	}
 

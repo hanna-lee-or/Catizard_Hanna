@@ -304,11 +304,7 @@ public class BlockScript : MonoBehaviour
         {
             int x = nodeReference.pos.column, y = nodeReference.pos.row;
             // 허수아비는 추가로 보드 모서리 쪽에 설치 X
-            if (nodeReference.isObstacle || x == 0 || x == 36 || y == 0 || y == 12)
-            {
-                
-            }
-            else
+            if (!(nodeReference.isObstacle || x == 0 || x == 36 || y == 0 || y == 12))
             {
                 card.ScrowPreview(nodeReference.pos.column, nodeReference.pos.row);
             }

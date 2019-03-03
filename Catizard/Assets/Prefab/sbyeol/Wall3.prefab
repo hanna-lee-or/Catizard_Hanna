@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 1168901523477688904}
   - component: {fileID: 1186585917}
   - component: {fileID: 1186585918}
+  - component: {fileID: 8715922963546177054}
   m_Layer: 0
   m_Name: Wall3
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -123,3 +124,24 @@ MonoBehaviour:
   rw: {fileID: 0}
   index: 0
   wall: {fileID: 5642779875004249380}
+--- !u!50 &8715922963546177054
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5642779875004249380}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

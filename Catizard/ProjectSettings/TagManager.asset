@@ -8,6 +8,8 @@ TagManager:
   - cat
   - scrow
   - scrowCenter
+  - wall
+  - cat_Boom
   layers:
   - Default
   - TransparentFX

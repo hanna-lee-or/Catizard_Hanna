@@ -10,10 +10,12 @@ public class remove : MonoBehaviour
     public GameObject wall;
 
     private SpriteRenderer thisSprite;
+    public bool flag;
 
     void Awake()
     {
         index = -1;
+        flag = false;
         thisSprite = GetComponent<SpriteRenderer>();
     }
 
@@ -40,7 +42,7 @@ public class remove : MonoBehaviour
 
     IEnumerator destroy()
     {
-        if (rw.canRemove)
+        if (rw.canRemove || flag)
         {
             if (pw.wallList.Exists(x => x.gameObject))
             {
@@ -52,4 +54,16 @@ public class remove : MonoBehaviour
             }
         }
     }
+
+    void OnTriggerStay2D(Collider2D coll)
+    {
+        if (coll.gameObject.CompareTag("cat_Boom")){
+            if (N_CardSystem.isBoom && !flag)
+            {
+                flag = true;
+                StartCoroutine("destroy");
+            }
+        }
+    }
+
 }
