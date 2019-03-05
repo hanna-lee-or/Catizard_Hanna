@@ -38,6 +38,8 @@ public class GridView : MonoBehaviour
 
     public int[] rand_x = new int[9];
     public int[] rand_y = new int[9];
+    public GameObject Dots;
+    public GameObject[] dots;
 
 
     void Start()
@@ -223,6 +225,20 @@ public class GridView : MonoBehaviour
         {
             grid.gridNodes[2 * rand_y[k] * 37 + 2 * rand_x[k]].isObstacle = true; // 코드 보드판에서 좌표는 (2n ,2m)임. 그걸 인덱스화해서 장애물로 만듦!
         }
+        Dots.SetActive(true);
+        for (int i = 0; i < 9; i++)
+        { ///dots 인덱스는 세로로 증가함
+            int dotIndex = 6 * rand_x[i] + rand_y[i];
+            if ((rand_x[i] != 18 && rand_y[i] != 6) && dotIndex >= 0 && dotIndex < 108)
+                dots[dotIndex].SetActive(false);  // 오른쪽 아래
+            if ((rand_x[i] != 18 && rand_y[i] != 0) && dotIndex - 1 >= 0 && dotIndex - 1 < 108)
+                dots[dotIndex - 1].SetActive(false); // 오른쪽 위
+            if ((rand_x[i] != 0 && rand_y[i] != 6) && dotIndex - 6 >= 0 && dotIndex - 6 < 108)
+                dots[dotIndex - 6].SetActive(false); // 왼쪽 아래
+            if ((rand_x[i] != 0 && rand_y[i] != 0) && dotIndex - 7 >= 0 && dotIndex - 7 < 108)
+                dots[dotIndex - 7].SetActive(false); // 왼쪽 위
+        }
+        Dots.SetActive(false);
     }
 
     // Return the World Position of these grid points, relative to this object

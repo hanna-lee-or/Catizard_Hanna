@@ -40,7 +40,7 @@ public class N_CardDeckSys : MonoBehaviour
         isTest = istest;
         // test상황이면 Inspector창에서 설정한 값으로 덱 상태 설정.
         // 아니면 N_PlayerInfo 스크립트 상에 설정된 값을 불러옴.
-        if (!isTest)
+        /*if (!isTest)
         {
             TotalCard = N_PlayerInfo.CardSum;
             CardOrder = new int[TotalCard];
@@ -59,6 +59,19 @@ public class N_CardDeckSys : MonoBehaviour
             if(CardOrder.Length != TotalCard)
             {
                 print("Error(Inspector) : 카드 덱 설정 오류");
+            }
+        }*/
+
+        // 덱 설정
+        TotalCard = N_PlayerInfo.CardSum;
+        CardOrder = new int[TotalCard];
+        // 카드를 차곡차곡 CardOrder에 쌓음.
+        int index = 0;
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < N_PlayerInfo.CardNum[i]; j++)
+            {
+                CardOrder[index++] = i;
             }
         }
 
@@ -105,6 +118,7 @@ public class N_CardDeckSys : MonoBehaviour
             }
             if (CS.wallCard >= 0)
             {
+                CS.Dots.SetActive(false);
                 CS.wallCard = -1;
                 CS.UIArray_N[2].SetActive(false);
                 CS.UIArray_N[3].SetActive(false);

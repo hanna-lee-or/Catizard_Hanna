@@ -25,6 +25,7 @@ public class putWall : MonoBehaviour
     public int cardType;
     public bool canPut = false;
     private int bIndex;
+    public GameObject Dots;
 
     void Awake()
     {
@@ -354,5 +355,6 @@ public class putWall : MonoBehaviour
             card.CardCover.SetActive(false);
             card.UIArray_N[2].SetActive(false);
         }
+    Dots.SetActive(false);
     }
 }

@@ -38,7 +38,7 @@ public class N_CameraEvent : MonoBehaviour
         // 줌인/줌아웃
         else
         {
-            thisCamera.orthographicSize += scroll;
+            thisCamera.orthographicSize -= scroll;
         }
 
         // 원상태로 돌아가기

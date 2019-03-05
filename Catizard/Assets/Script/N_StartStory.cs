@@ -29,8 +29,8 @@ public class N_StartStory : MonoBehaviour, IPointerDownHandler
     // 초기 플레이어 덱 세팅
     public void CardSetting()
     {
-        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.block1] = 5;
-        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.block2] = 1;
+        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.block1] = 4;
+        N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.block2] = 2;
         N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.block3] = 1;
         N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.wild] = 2;
         N_PlayerInfo.CardNum[(int)N_PlayerInfo.Card.provoke] = 2;

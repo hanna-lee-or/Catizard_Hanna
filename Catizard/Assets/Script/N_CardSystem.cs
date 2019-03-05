@@ -36,7 +36,7 @@ public class N_CardSystem : MonoBehaviour
     public Transform[] scrowXY;
     public N_CardDeckSys CDS;
     public Text goldText, timeText_C, timeText_O;
-    public GameObject Game_clear, Game_Over;
+    public GameObject Game_clear, Game_Over, Dots;
 
     // Audio_UseCard
     public AudioClip S_Click, S_Reflection, S_BlockOn, S_BlockOff, S_Scrow, S_Provoke, S_Catnip, S_Wings, S_CountUp, S_Win, S_Lose;
@@ -281,16 +281,19 @@ public class N_CardSystem : MonoBehaviour
         switch (num)
         {
             case 0:
+                Dots.SetActive(true);
                 wallCard = 0;
                 CardCover.SetActive(true);
                 UIArray_N[2].SetActive(true);
                 break;
             case 1:
+                Dots.SetActive(true);
                 wallCard = 1;
                 CardCover.SetActive(true);
                 UIArray_N[2].SetActive(true);
                 break;
             case 2:
+                Dots.SetActive(true);
                 wallCard = 2;
                 CardCover.SetActive(true);
                 UIArray_N[2].SetActive(true);
@@ -1007,7 +1010,7 @@ public class N_CardSystem : MonoBehaviour
         isCatSkill = true;
         RemainPath = gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex;
         
-        if (skill_hard <= RemainPath && SP_Slider.value>=80)
+        if (skill_hard <= RemainPath && SP_Slider.value>=70)
         {
             PlaySoundC(5);
             //폭발 스킬 쓰기
