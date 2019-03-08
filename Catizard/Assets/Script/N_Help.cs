@@ -13,26 +13,35 @@ public class N_Help : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 16; i++)
         {
             helps[i].gameObject.SetActive(false);
         }
         helps[Page].gameObject.SetActive(true);
+        UpButton.gameObject.SetActive(true);
+        DownButton.gameObject.SetActive(false);
 
     }
 
     public void PageUp()
     {
-        if (Page == 6)
+
+        if (Page == 15)
         {
             return;
         }
-        else if (Page < 6)
+        else if (Page < 15)
         {
             helps[Page].gameObject.SetActive(false);
             Page++;
+            if (Page == 15) { UpButton.gameObject.SetActive(false); }
             helps[Page].gameObject.SetActive(true);
+            if (Page != 0)
+            {
+                DownButton.gameObject.SetActive(true);
+            }
         }
+
     }
 
     public void PageDown()
@@ -45,7 +54,12 @@ public class N_Help : MonoBehaviour
         {
             helps[Page].gameObject.SetActive(false);
             Page--;
+            if (Page == 0) { DownButton.gameObject.SetActive(false); }
             helps[Page].gameObject.SetActive(true);
+            if (Page != 15)
+            {
+                UpButton.gameObject.SetActive(true);
+            }
         }
     }
 }

@@ -933,8 +933,20 @@ public class N_CardSystem : MonoBehaviour
         //Clear_window.SetActive(true);
         Game_clear.SetActive(true);
         int pathCount = gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex;
-        bonus_gold = (pathCount - 1) * 40;
+       
+        // 시간 계산
+
+        print("전체 패스 : " + gridView.CatPath[gridView.minIndex].Count);
+        print("야옹이 인덱스 : " + gridView.CatIndex);
+        print("남은 패스 칸수 : " + pathCount);
+
+        remain_time = 4 * pathCount;
+        timeText_C.text = "" + remain_time;
+
         // 챕터별 보상 +
+
+        bonus_gold = remain_time*10;
+
         if (N_CardDeckSys.isTest)
         {
             if (N_PlayerInfo.Chap1_clear)
@@ -959,31 +971,30 @@ public class N_CardSystem : MonoBehaviour
                 N_PlayerInfo.Chap2_clear = true;
             }
         }
-        bonus_gold += chap_gold;
-        N_PlayerInfo.Gold += bonus_gold;
-        // 시간 계산
-        remain_time = 4 * pathCount;
-        timeText_C.text = "" + remain_time;
+        N_PlayerInfo.Gold += (bonus_gold + chap_gold) ;
+       
         // 골드 계산
         goldText.text = "" + chap_gold;
         total_gold = chap_gold;
         yield return new WaitForSeconds(1f);
         PlaySoundR(11);
-        while (bonus_gold > total_gold)
+        for (int i = 0; i < remain_time; i++)
         {
-            if (bonus_gold - total_gold > 10)
-            {
+            //if (bonus_gold - total_gold > 10)
+            //{
                 total_gold += 10;
                 goldText.text = "" + total_gold;
                 yield return new WaitForSeconds(0.02f);
-            }
+            /*}
             else
             {
+            
                 total_gold++;
                 goldText.text = "" + total_gold;
                 yield return new WaitForSeconds(0.01f);
-            }
+            }*/
         }
+        
     }
 
     // 플레이어가 졌을 때
