@@ -36,7 +36,9 @@ public class N_CardSystem : MonoBehaviour
     public Transform[] scrowXY;
     public N_CardDeckSys CDS;
     public Text goldText, timeText_C, timeText_O;
-    public GameObject Game_clear, Game_Over, Dots;
+    public GameObject ClearScreen, LoseScreen, Game_clear, Game_Over, Dots;
+    public SpriteRenderer[] boomImage;
+    public GameObject cat_boom;
 
     // Audio_UseCard
     public AudioClip S_Click, S_Reflection, S_BlockOn, S_BlockOff, S_Scrow, S_Provoke, S_Catnip, S_Wings, S_CountUp, S_Win, S_Lose;
@@ -208,6 +210,7 @@ public class N_CardSystem : MonoBehaviour
                 gridView.isGame = false;
                 PlaySoundR(24);
                 gridView.JPS();
+                yield return new WaitForSeconds(2f);
                 Win();
             }
             if (HeroSlider.value < HeroSlider.maxValue && isCurse)
@@ -502,7 +505,7 @@ public class N_CardSystem : MonoBehaviour
                 {
                     isGame = false;
                     gridView.isGame = false;
-                    Lose();
+                    StartCoroutine("Lose");
                 }
             }
 
@@ -927,6 +930,7 @@ public class N_CardSystem : MonoBehaviour
     public void Win()
     {
         PlaySoundU(12);
+        ClearScreen.SetActive(true);
         StartCoroutine("Clear");
     }
 
@@ -935,19 +939,14 @@ public class N_CardSystem : MonoBehaviour
         yield return new WaitForSeconds(2f);
         //Clear_window.SetActive(true);
         Game_clear.SetActive(true);
-        int pathCount = gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex;
+        int pathCount = gridView.CatPath[gridView.minIndex].Count;
+        print("전체 패스 : " + gridView.CatPath[gridView.minIndex].Count);
 
         // 시간 계산
-
-        print("전체 패스 : " + gridView.CatPath[gridView.minIndex].Count);
-        print("야옹이 인덱스 : " + gridView.CatIndex);
-        print("남은 패스 칸수 : " + pathCount);
-
         remain_time = 4 * pathCount;
         timeText_C.text = "" + remain_time;
 
         // 챕터별 보상 +
-
         bonus_gold = remain_time * 10;
 
         if (N_CardDeckSys.isTest)
@@ -983,29 +982,21 @@ public class N_CardSystem : MonoBehaviour
         PlaySoundR(11);
         for (int i = 0; i < remain_time; i++)
         {
-            //if (bonus_gold - total_gold > 10)
-            //{
             total_gold += 10;
             goldText.text = "" + total_gold;
             yield return new WaitForSeconds(0.02f);
-            /*}
-            else
-            {
-            
-                total_gold++;
-                goldText.text = "" + total_gold;
-                yield return new WaitForSeconds(0.01f);
-            }*/
         }
 
     }
 
     // 플레이어가 졌을 때
-    public void Lose()
+    IEnumerator Lose()
     {
         PlaySoundU(6);
         CDS.StopAllCoroutines();
         CardCover.SetActive(true);
+        LoseScreen.SetActive(true);
+        yield return new WaitForSeconds(2f);
         Game_Over.SetActive(true);
         remain_time = (int)HeroSlider.value / 2;
         timeText_O.text = "" + remain_time;
@@ -1021,10 +1012,11 @@ public class N_CardSystem : MonoBehaviour
         isCatSkill = true;
         RemainPath = gridView.CatPath[gridView.minIndex].Count - gridView.CatIndex;
         
-        if (skill_hard <= RemainPath && SP_Slider.value>=70)
+        if (skill_hard <= RemainPath && SP_Slider.value >= 60)
         {
             PlaySoundC(5);
             //폭발 스킬 쓰기
+            SP_Slider.value -= 60;
             Cat_Boom();
             Invoke("PlayBoom", 1f);
         }
@@ -1079,7 +1071,14 @@ public class N_CardSystem : MonoBehaviour
 
     IEnumerator Boom()
     {
-        yield return new WaitForSeconds(2);
+        cat_boom.SetActive(true);
+        for (int i = 0; i < 25; i++)
+        {
+            for (int j = 0; j < boomImage.Length; j++)
+                boomImage[j].color = new Color(1, 1, 1, 1 - 0.4f*i);
+            yield return new WaitForSeconds(0.1f);
+        }
+        cat_boom.SetActive(false);
         isBoom = false;
         isCatSkill = false;
     }

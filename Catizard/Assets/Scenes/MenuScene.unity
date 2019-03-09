@@ -1083,7 +1083,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Normal \uBAA8\uB4DC"
+  m_Text: "Hard \uBAA8\uB4DC"
 --- !u!222 &532309700
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2566,7 +2566,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Tutorial \uBAA8\uB4DC"
+  m_Text: "Easy \uBAA8\uB4DC"
 --- !u!222 &2092358184
 CanvasRenderer:
   m_ObjectHideFlags: 0
