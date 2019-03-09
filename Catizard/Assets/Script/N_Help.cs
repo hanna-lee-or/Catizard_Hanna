@@ -9,6 +9,7 @@ public class N_Help : MonoBehaviour
     public GameObject UpButton, DownButton;
     public Image[] helps;
     public int Page = 0;
+    public AudioSource sound;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +24,7 @@ public class N_Help : MonoBehaviour
 
     }
 
+
     public void PageUp()
     {
 
@@ -32,6 +34,7 @@ public class N_Help : MonoBehaviour
         }
         else if (Page < 15)
         {
+            sound.Play();
             helps[Page].gameObject.SetActive(false);
             Page++;
             if (Page == 15) { UpButton.gameObject.SetActive(false); }
@@ -52,6 +55,7 @@ public class N_Help : MonoBehaviour
         }
         else if (Page > 0)
         {
+            sound.Play();
             helps[Page].gameObject.SetActive(false);
             Page--;
             if (Page == 0) { DownButton.gameObject.SetActive(false); }
